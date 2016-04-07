@@ -15,7 +15,9 @@ Why are we learning MongoDB and Mongoose?
 
 >CRUD is something that is necessary in most every application out there. We have to create, read, update, and delete information all the time.
 
-What are the Advantages of using MongoDB (non-relational) versus PostgreSQL (relational)?
+When would we use MongoDB (non-relational) versus PostgreSQL (relational)?
+
+>HINT theres not always a right answer!
 
 ![mongoose.js](https://www.filepicker.io/api/file/KDQZV88GTIaQn6p0GagE)
 
@@ -59,7 +61,7 @@ We will be creating a 2 model Todo App using Mongo/Mongoose. Authors have many R
 $ npm install mongoose --save
 ```
 
-The first thing we need to do is require mongoose in our project and open a connection to the test database on our locally running instance of MongoDB:
+The first thing we need to do is require mongoose in our project and open a connection to the test database on our locally
 
 ```js
 var mongoose = require('mongoose');
@@ -92,7 +94,7 @@ $ node db/schema.js
 
 Follow Instructions for `Step 2` on the `readme.md`
 
-[See Solution]https://github.com/ga-wdi-exercises/reminders_mongo/blob/267a908faaae06ab4c35da6d671a867cf1bc6426/db/schema.js
+[See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/267a908faaae06ab4c35da6d671a867cf1bc6426/db/schema.js)
 
 ## Mongoose Schema & Models (10 min)
 
@@ -132,7 +134,7 @@ var StudentModel = mongoose.model("Student", StudentSchema)
 
 >The model `Student` is for the `students` collection in the database.
 
-## Embedded Documents versus Mongoose Collections (10 min)
+## Embedded Documents VS Multiple Collections (10 min)
 
 Now, Let's add another model to our `db/schema.js`.
 
@@ -174,11 +176,11 @@ var StudentSchema = new Schema({
 (-) Disadvantages:
 * Overhead and Scalability. Can't exceed 16MD per document
 
-### Separate Collections/Population
+### Multiple Collections/Population
 
 [Population](http://mongoosejs.com/docs/populate.html)
 
-Similar to how we added a foreign key in PostgreSQL, we can add references to documents in other collections by storing and array of `ObjectIds` referencing document ids from another Model
+Similar to how we added a foreign key in PostgreSQL, we can add references to documents in other collections by storing an array of `ObjectIds` referencing document ids from another Model
 
 ```js
 var ProjectSchema = new Schema({
@@ -201,21 +203,22 @@ var StudentSchema = new Schema({
 (-) Disadvantages:
 * Requires more work, need to find both documents that have the relationship(two separate queries)
 
-**When to use each one?**
+### When should I use one over the other?
 
-* Separate Collections are preferable if you need to select individual documents need additional control over queries, or have large documents.
+* Separate Collections are preferable if you need to select individual documents, need additional control over queries, or have large documents.
+
 * Smaller or fewer documents would be a better fit for embedded documents
 
 
 We will be using `embedded` or sub documents today in class!
 
-## You-Do: Step 3: Set Up Schema and Models (15 min)
+## You-Do: Step 3: Set Up Schema and Models (10 min)
 
 Follow Step 3 to step up your Reminder and Author Schemas and Models
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/cfee42d3cfd0bf5f2581cc61ba712eb8e1b7777f/db/schema.js)
 
-## I-Do: Create (10 min)
+## Create (10 min)
 
 **Create Example:**
 
@@ -260,7 +263,7 @@ becky.save(function(err, student){
 });
 ```
 
-## Seeds Data (5 min)
+## Seeds Data (10 min)
 
 We need to make sure we can connect our `schema.js` file to our `seeds.js`.
 
@@ -342,11 +345,14 @@ With most Mongoose Queries, we will be using a callback function, which will be 
 
 >With this callback function, the query will be executed immediately and the results are then passed into the callback
 
+## Break (10 min)
+
 ## You-Do - Step 4: Adds Seeds Data and Create New Documents (15 min)
+
+Add seeds data to create new documents in our reminders MongoDB database!
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/9b5a93841df550516e04778066cb43bd790c11f8)
 
-## Break (10 min)
 
 ## Mongoose Queries (10 min)
 
@@ -401,16 +407,16 @@ var studentController = {
     });
   }
 };
-
-// studentController.index();
 studentController.show({name: "becky"});
 ```
 
 ## You-Do: Step 5: Read (Index and Show) (10 min)
 
+Create methods for adding functionality to see all authors and find one author
+
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/d51081c0bf995bbd7f47883467da1c06a03de058)
 
-## Update (10 min)
+## Update (5 min)
 
 ```js
   update: function(req, update){
@@ -425,12 +431,12 @@ studentController.show({name: "becky"});
   }
 };
 
-// studentController.index();
-// studentController.show({name: "becky"});
 studentController.update({name: "becky"}, {name: "Sarah"});
 ```
 
 ## You-Do: Step-6: Update Documents (10 min)
+
+Write an update method to edit an author in our database.
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/d51081c0bf995bbd7f47883467da1c06a03de058)
 
@@ -453,15 +459,19 @@ studentController.update({name: "becky"}, {name: "Sarah"});
 authorsController.destroy({name: "bob"});
 ```
 
+## Break (10 min)
+
 ## You-Do: Step-7: Delete Documents (10 min)
+
+Write destroy methods to delete documents from our database
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/469d3c09059c60b7779a8c3a8c2fb12aefcc779a/controllers/authors.controller.js)
 
-## You-Do: Bonus: Adding and Deleting Embedded Documents
+## You-Do: Bonus: Adding and Deleting Embedded Documents  10 min)
 
 Work to Write Code to Add and Delete Reminders from an Author document
 
-## Validations
+## Validations (10 min)
 
 Mongoose contains built in validators and an option to create custom validators as well.
 
@@ -591,3 +601,4 @@ Userschema.pre("save", function(next) {
 
 ### Additional Resources
 * [Mongoose Documention](http://mongoosejs.com/index.html)
+* [Embedded Docs versus Multiple Collections](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=mongoose%20embedded%20versus%20collections)
