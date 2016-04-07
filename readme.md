@@ -6,7 +6,7 @@
 - Describe the role of Mongoose schema and models
 - Use Mongoose to preform CRUD functionality
 - List and describe common Mongoose queries
-- Persist data using Mongoose nested collections
+- Persist data using Mongoose Embedded Documents
 - Describe how to use validations in mongoose
 
 ## Opening Framing (5 min)
@@ -17,17 +17,15 @@ Why are we learning MongoDB and Mongoose?
 
 What are the Advantages of using MongoDB (non-relational) versus PostgreSQL (relational)?
 
+![mongoose.js](https://www.filepicker.io/api/file/KDQZV88GTIaQn6p0GagE)
 
 ## Mongoose (5 min)
 
 >"Let's face it, writing MongoDB validation, casting and business logic boilerplate is a drag. That's why we wrote Mongoose."
 
-Mongoose is an ORM, that allows us to encapsulate and model our data in our applications. It gives us access to additional helpers, functions, and queries to simply and easily preform CRUD actions.
-
-![mongoose.js](https://www.filepicker.io/api/file/KDQZV88GTIaQn6p0GagE)
-
-
 ## http://mongoosejs.com
+
+Mongoose is an ORM, that allows us to encapsulate and model our data in our applications. It gives us access to additional helpers, functions, and queries to simply and easily preform CRUD actions.
 
 Review example on [mongoosejs.com](http://mongoosejs.com)
 
@@ -46,12 +44,16 @@ kitty.save(function (err) {
 
 ## You-Do - Step 1: Initial Set Up for Reminders (5 min)
 
-We will be creating 2 model Todo App using Mongo/Mongoose. Authors have many Reminders.
+We will be creating a 2 model Todo App using Mongo/Mongoose. Authors have many Reminders.
 
 1. Fork and Clone this Repo:[https://github.com/ga-wdi-exercises/reminders_mongo]
 2. Make sure to checkout locally to `mongoose` branch: `$ git checkout mongoose`
 
-## Mongoose Install and Connection (5 min)
+[Starter Code](https://github.com/ga-wdi-exercises/reminders_mongo/tree/mongoose)
+
+[Solution Code](https://github.com/ga-wdi-exercises/reminders_mongo/tree/mongoose-solution)
+
+## Mongoose Installation and Connection Set Up (5 min)
 
 ```bash
 $ npm install mongoose --save
@@ -71,7 +73,7 @@ var db = mongoose.connection;
 db.on('error', function(err){
   console.log(err);
 });
-// will console.log "Connected" if successfully connects
+// will console.log "database has been connected" if successfully connects
 db.once('open', function() {
   console.log("database has been connected!");
 
@@ -86,7 +88,7 @@ Now let's run our `db/schema.js` file:
 $ node db/schema.js
 ```
 
-## You-Do - Step 2: Install Mongoose and Establish Connection (5 min)
+## You-Do - Step 2: Install Mongoose and Connection (5 min)
 
 Follow Instructions for `Step 2` on the `readme.md`
 
@@ -94,9 +96,13 @@ Follow Instructions for `Step 2` on the `readme.md`
 
 ## Mongoose Schema & Models (10 min)
 
-What is a Mongoose Schema?
->MongoDB has a flexible schema that allows for variability between different documents in the same collection.
->This is be used to define attributes for our documents
+**What is a Mongoose Schema?**
+
+* Everything in Mongoose starts with a Schema!
+
+* Schemas are used to define attributes and structure for our documents
+
+* Each Schema maps to a MongoDB collection and defines the shape of the documents within that collection
 
 Mongoose Schema Example:
 
@@ -111,45 +117,97 @@ var StudentSchema = new Schema({
 })
 
 ```
-What are Mongoose Models?
->Mongoose Models will represent documents in our database. They are essentially constructors, which will allow us to preform CRUD actions with our MongoDB Database.
+**What are Mongoose Models?**
+
+* Mongoose Models will represent documents in our database. They are essentially constructors, which will allow us to preform CRUD actions with our MongoDB Database.
+
+* Models are defined by passing a Schema instance to mongoose.model.
 
 ```js
-// setting models in mongoose utilizing schemas defined above
 var StudentModel = mongoose.model("Student", StudentSchema)
 ```
+>The .model() function makes a copy of schema. Make sure that you've added everything you want to schema before calling .model()!
 
 >The first argument is the singular name of the collection your model is for. Mongoose automatically looks for the plural version of your model name.
->Thus, for the example above, the model `Student` is for the `people` collection in the database. The .model() function makes a copy of schema. Make sure that you've added everything you want to schema before calling .model()!
 
-## Nested Mongoose Collection (5 min)
+>The model `Student` is for the `students` collection in the database.
 
-Now, I'm going to add another model to my `db/schema.js`.
+## Embedded Documents versus Mongoose Collections (10 min)
 
-I am going to add another Schema now for Project, since I want to store Students and Project in my application.
+Now, Let's add another model to our `db/schema.js`.
 
-Similar to how you might think of a one to many relationship in a relational database, we are going to mimic a student has many projects relationship.
+We will be adding a schema now for `Project`, since I want to create an application that tracks Students and Projects.
+
+Similar to how you might think of a one to many relationship in a relational database, A Student will have many Projects. We will be accomplishing this relationship through `embedded` or `sub` documents.
+
+How can we describe this relationship in Mongoose?
+
+### Embedded Documents
+
+[Embedded Documents](http://mongoosejs.com/docs/2.7.x/docs/embedded-documents.html)
+
+What are Embedded Documents?
+
+>Docs with schemas of their own which are elements of a parents document array,  contain all the same features as normal documents.
+
+>The only difference is that embedded documents are not saved individually, they are saved whenever their top-level parent document is saved.
 
 ```js
-// defining schema for projects
 var ProjectSchema = new Schema({
   title: String,
   unit: String
 })
 
-// adding in embedded documents for StudentSchema
+
 var StudentSchema = new Schema({
   name: String,
   age: Number,
   projects: [ProjectSchema]
-
 })
 
 ```
 >The projects key of your ProjectSchema documents will then be an instance of DocumentArray. This is a special subclassed Array that can deal with casting, and has special methods to work with embedded documents.
 
-[Mongoose Embedded Documents](http://mongoosejs.com/docs/2.7.x/docs/embedded-documents.html)
+(+) Advantages:
+* Embedded Documents are easy and fast
 
+(-) Disadvantages:
+* Overhead and Scalability. Can't exceed 16MD per document
+
+### Separate Collections/Population
+
+[Population](http://mongoosejs.com/docs/populate.html)
+
+Similar to how we added a foreign key in PostgreSQL, we can add references to documents in other collections by storing and array of `ObjectIds` referencing document ids from another Model
+
+```js
+var ProjectSchema = new Schema({
+  title: String,
+  unit: String,
+  students: [{type: Schema.ObjectId, ref: "Student"}]
+});
+
+var StudentSchema = new Schema({
+  name: String,
+  age: Number,
+  projects: [ {type: Schema.ObjectId, ref: "Project"} ]
+});
+
+```
+(+) Advantages:
+* Separate Collections offer greater flexibility with querying
+* Separate Collections might be a better decision for scaling- A document, including all its embedded documents and arrays, cannot exceed 16MB
+
+(-) Disadvantages:
+* Requires more work, need to find both documents that have the relationship(two separate queries)
+
+**When to use each one?**
+
+* Separate Collections are preferable if you need to select individual documents need additional control over queries, or have large documents.
+* Smaller or fewer documents would be a better fit for embedded documents
+
+
+We will be using `embedded` or sub documents today in class!
 
 ## You-Do: Step 3: Set Up Schema and Models (15 min)
 
@@ -397,47 +455,11 @@ authorsController.destroy({name: "bob"});
 
 ## You-Do: Step-7: Delete Documents (10 min)
 
-
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/469d3c09059c60b7779a8c3a8c2fb12aefcc779a/controllers/authors.controller.js)
 
-## Creating and deleting nested documents
+## You-Do: Bonus: Adding and Deleting Embedded Documents
 
-Let's define a route and a controller action for creating reminders under an author document.
-
-**Creating Nested Documents:**
-
-In `controller/authorsController.js`:
-
-```js
-addReminder: function(req, res){
-  AuthorModel.findById(req.params.id, function(err, docs){
-    docs.reminders.push(new ReminderModel({body: req.body.body}))
-    docs.save(function(err){
-      if(!err){
-        res.redirect("/authors/" + req.params.id)
-      }
-    })
-  })
-}
-```
-**Deleting Nested Documents**
-
-```js
-removeReminder: function(req, res){
-  AuthorModel.findByIdAndUpdate(req.params.authorId, {
-    $pull:{
-      reminders: {_id: req.params.id}
-    }
-  }, function(err, docs){
-    if(!err){
-      res.redirect("/authors/" + req.params.authorId)
-    }
-  })
-}
-```
-
-> This is an alternate sytax `.findByIdAndUpdate()`. We can actually us this method and pass in an options object. In this case, we're setting a key of `$pull`. This will find the reminder by the id specified in the url(`req.params.id`) and get rid of it from the author. Then upon success of `.findByIdAndUpdate()` it redirects tot hat author's show page.
-
+Work to Write Code to Add and Delete Reminders from an Author document
 
 ## Validations
 
