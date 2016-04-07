@@ -4,11 +4,10 @@
 
 - Explain what is Mongoose
 - Describe the role of Mongoose schema and models
-- List and describe common Mongoose queries
-- Compare and Contrast Mongoose to Active Record
 - Use Mongoose to preform CRUD functionality
-- Describe how to use validations in mongoose
+- List and describe common Mongoose queries
 - Persist data using Mongoose nested collections
+- Describe how to use validations in mongoose
 
 ## Opening Framing (5 min)
 
@@ -203,7 +202,7 @@ becky.save(function(err, student){
 });
 ```
 
-## I-Do: Seeds Data (5 min)
+## Seeds Data (5 min)
 
 We need to make sure we can connect our `schema.js` file to our `seeds.js`.
 
@@ -287,8 +286,6 @@ With most Mongoose Queries, we will be using a callback function, which will be 
 
 ## You-Do - Step 4: Adds Seeds Data and Create New Documents (15 min)
 
-Follow Step 4 to create your seeds data in `db/seeds.js`.
-
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/9b5a93841df550516e04778066cb43bd790c11f8)
 
 ## Break (10 min)
@@ -355,20 +352,9 @@ studentController.show({name: "becky"});
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/d51081c0bf995bbd7f47883467da1c06a03de058)
 
-## I-Do: Update (10 min)
+## Update (10 min)
 
 ```js
-var studentController = {
-  index: function(){
-    StudentModel.find({}, function(err, docs){
-      console.log(docs);
-    });
-  },
-  show: function(req){
-    StudentModel.findOne({"name": req.name}, function(err, docs){
-      console.log(docs);
-    });
-  },
   update: function(req, update){
     StudentModel.findOneAndUpdate(req, update, {new: true}, function(err, docs){
       if(err){
@@ -390,6 +376,29 @@ studentController.update({name: "becky"}, {name: "Sarah"});
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/d51081c0bf995bbd7f47883467da1c06a03de058)
 
+
+## Delete (5 min)
+
+```js
+  destroy: function(req){
+    StudentModel.findOneAndRemove(req, function(err, docs){
+      if(err){
+        console.log(err);
+      }
+      else{
+        console.log(docs);
+      }
+    });
+  }
+};
+
+authorsController.destroy({name: "bob"});
+```
+
+## You-Do: Step-7: Delete Documents (10 min)
+
+
+[See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/469d3c09059c60b7779a8c3a8c2fb12aefcc779a/controllers/authors.controller.js)
 
 ## Creating and deleting nested documents
 
@@ -429,6 +438,134 @@ removeReminder: function(req, res){
 
 > This is an alternate sytax `.findByIdAndUpdate()`. We can actually us this method and pass in an options object. In this case, we're setting a key of `$pull`. This will find the reminder by the id specified in the url(`req.params.id`) and get rid of it from the author. Then upon success of `.findByIdAndUpdate()` it redirects tot hat author's show page.
 
-## How Does Mongoose Compare to Active Record?
 
 ## Validations
+
+Mongoose contains built in validators and an option to create custom validators as well.
+
+Validators are defined at the field level of a document and are executed when the document is being saved. If a validation error occurs, the save operation is aborted and the error is passed to the callback.
+
+**Built in Validators:**
+
+* `required`: used to validate the field existence in Mongoose, which is placed in your schema in the field you want to validate.
+
+Example: Let's say you want to verify the existence of a username field before you save the user document.
+
+```js
+var UserSchema = new Schema({
+  ...
+  username: {
+    type: String,
+    trim: true,
+    unique: true,
+    required: true
+  }
+});
+
+```
+>This will validate the existence of the username field when saving the document, thus preventing the saving of any document that doesn't contain that field.
+
+* `match`: type based validator for strings, placed in your fields for you schemas
+
+Continuing off the above example, to validate your email field, you would need to change your UserSchema as follows:
+
+```js
+var UserSchema = new Schema({
+  username: {
+    type: String,
+    trim: true,
+    unique: true,
+    required: true
+  },
+  email: {
+    type: String,
+    index: true,
+    match: /.+\@.+\..+/
+  }
+});
+```
+
+>The usage of a match validator here will make sure the email field value matches the given regex expression, thus preventing the saving of any document where the e-mail doesn't conform to the right pattern.
+
+* `enum`: helps to define a set of strings that are only available for that field value.
+
+```js
+var UserSchema = new Schema({
+  username: {
+    type: String,
+    trim: true,
+    unique: true,
+    required: true
+  },
+  email: {
+    type: String,
+    index: true,
+    match: /.+\@.+\..+/
+  },
+  role: {
+    type: String,
+    enum: ['Admin', 'Owner', 'User']
+  },
+
+});
+```
+>By Adding in `enum`, we are adding a validation to ensure only these three possible strings are saved in the document.
+
+**Custom Validations:**
+
+We can also define our own validators by using the validate property.
+
+This validate property value is typically an array consisting of a validation function and an error message.
+
+For example, if we want to validate the length of your user's password. To do so, you would have to make these changes in your UserSchema:
+
+```js
+var UserSchema = new Schema({
+  ...
+  password: {
+    type: String,
+    validate: [
+      function(password) {
+        return password.length >= 6;
+      },
+      'Password should be longer'
+    ]
+  },
+});
+```
+>This custom validator will make sure your user's password is at least six characters long or it will prevent it from saving the document
+
+* `.pre` validation: middleware that are functions which are passed control during execution of asynchronous functions.
+
+By using `.pre`, these are executed before validations.
+
+
+```js
+Userschema.pre("save", function(next) {
+    var self = this;
+
+    UserModel.findOne({email : this.email}, 'email', function(err, results) {
+        if(err) {
+            next(err);
+        } else if(results) {
+            console.warn('results', results);
+            self.invalidate("email", "email must be unique");
+            next(new Error("email must be unique"));
+        } else {
+            next();
+        }
+    });
+});
+
+```
+## Closing (5 min)
+
+### Quiz Questions
+* How is Mongoose used to interact with MongoDB?
+* What are embedded documents in Mongoose?
+* Why do we create a Schema in Mongoose?
+* What do we need after Mongoose queries?
+* What are common built in validations for Mongoose? Why would we use them?
+
+### Additional Resources
+* [Mongoose Documention](http://mongoosejs.com/index.html)
