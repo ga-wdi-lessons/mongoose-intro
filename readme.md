@@ -120,6 +120,8 @@ var StudentSchema = new Schema({
 })
 
 ```
+>Mongo will add a primary key to each object, called ObjectId, referenced as _id in the data.
+
 **What are Mongoose Models?**
 
 * Mongoose Models will represent documents in our database. They are essentially constructors, which will allow us to preform CRUD actions with our MongoDB Database.
@@ -135,7 +137,7 @@ var StudentModel = mongoose.model("Student", StudentSchema)
 
 >The model `Student` is for the `students` collection in the database.
 
-## Embedded Documents VS Multiple Collections (10 min)
+## Embedded Documents VS References between Collections (10 min)
 
 Now, Let's add another model to our `db/schema.js`.
 
@@ -194,11 +196,11 @@ var StudentSchema = new Schema({
 (-) Disadvantages:
 * Overhead and Scalability. Can't exceed 16MD per document
 
-### Multiple Collections/Population
+### Multiple Collections/References 
 
-[Population](http://mongoosejs.com/docs/populate.html)
+[References](https://docs.mongodb.org/manual/tutorial/model-referenced-one-to-many-relationships-between-documents)
 
-Similar to how we added a foreign key in PostgreSQL, we can add references to documents in other collections by storing an array of `ObjectIds` referencing document ids from another Model
+Similar to how we added a foreign key in PostgreSQL, we can add `references` to documents in other collections by storing an array of `ObjectIds` referencing document ids from another Model
 
 ```js
 var ProjectSchema = new Schema({
@@ -214,16 +216,19 @@ var StudentSchema = new Schema({
 });
 
 ```
+
+>Since we are using _id to refer to other objects, we use the ObjectId type in the Mongoose definition. The ref attribute must match exactly the model name in your model definition.
+
 (+) Advantages:
-* Separate Collections offer greater flexibility with querying
-* Separate Collections might be a better decision for scaling- A document, including all its embedded documents and arrays, cannot exceed 16MB
+* Could offer greater flexibility with querying
+* Might be a better decision for scaling- A document, including all its embedded documents and arrays, cannot exceed 16MB
 
 (-) Disadvantages:
 * Requires more work, need to find both documents that have the relationship(two separate queries)
 
 ### When should I use one over the other?
 
-* Separate Collections are preferable if you need to select individual documents, need additional control over queries, or have large documents.
+* Referencing separate collections are preferable if you need to select individual documents, need additional control over queries, or have large documents.
 
 * Smaller or fewer documents would be a better fit for embedded documents
 
