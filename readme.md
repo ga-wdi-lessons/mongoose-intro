@@ -370,6 +370,10 @@ With most Mongoose Queries, we will be using a callback function, which will be 
 
 >With this callback function, the query will be executed immediately and the results are then passed into the callback
 
+Why are Callbacks Necessary?
+
+>Async JS
+
 ## Break (10 min)
 
 ## You-Do - Step 4: Adds Seeds Data and Create New Documents (15 min)
