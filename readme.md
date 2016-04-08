@@ -48,14 +48,14 @@ kitty.save(function (err) {
 
 We will be creating a 2 model Todo App using Mongo/Mongoose. Authors have many Reminders.
 
-1. Fork and Clone this Repo:[https://github.com/ga-wdi-exercises/reminders_mongo]
+1. Fork and Clone this Repo: https://github.com/ga-wdi-exercises/reminders_mongo
 2. Make sure to checkout locally to `mongoose` branch: `$ git checkout mongoose`
 
 [Starter Code](https://github.com/ga-wdi-exercises/reminders_mongo/tree/mongoose)
 
 [Solution Code](https://github.com/ga-wdi-exercises/reminders_mongo/tree/mongoose-solution)
 
-## Mongoose Installation and Connection Set Up (5 min)
+## I-Do - Mongoose and Connection Set Up (5 min)
 
 ```bash
 $ npm install mongoose --save
@@ -96,7 +96,7 @@ Follow Instructions for `Step 2` on the `readme.md`
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/267a908faaae06ab4c35da6d671a867cf1bc6426/db/schema.js)
 
-## Mongoose Schema & Models (10 min)
+## I-Do - Mongoose Schema & Models (10 min)
 
 **What is a Mongoose Schema?**
 
@@ -168,7 +168,7 @@ var StudentSchema = new Schema({
 })
 
 ```
->The projects key of your ProjectSchema documents will then be an instance of DocumentArray. This is a special subclassed Array that can deal with casting, and has special methods to work with embedded documents.
+>The projects key of your ProjectSchema documents will be a special array that has specific methods to work with embedded documents.
 
 (+) Advantages:
 * Embedded Documents are easy and fast
@@ -218,7 +218,7 @@ Follow Step 3 to step up your Reminder and Author Schemas and Models
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/cfee42d3cfd0bf5f2581cc61ba712eb8e1b7777f/db/schema.js)
 
-## Create (10 min)
+## I-Do: Create (10 min)
 
 **Create Example:**
 
@@ -247,7 +247,7 @@ Student.create({ name: 'Anna', age: 30 }, function (err, person) {
 });
 ```
 
-**Embedded Documents Example: Add Project**
+**Embedded Documents Example**
 
 ```js
 var project1 = new ProjectModel({title: "memory game", unit: "JS"});
@@ -270,10 +270,12 @@ We need to make sure we can connect our `schema.js` file to our `seeds.js`.
 In order to do that we need to add the following in our `db/schema.js`:
 
 ```js
+
 module.exports ={
   StudentModel: StudentModel,
-  ReminderModel: ReminderModel
+  ProjectModel: ProjectModel
 };
+
 ```
 
 And add the following in `db/seeds.js`:
@@ -356,6 +358,8 @@ Add seeds data to create new documents in our reminders MongoDB database!
 
 ## Mongoose Queries (10 min)
 
+[Mongoose Queries Documentation](http://mongoosejs.com/docs/api.html#query-js)
+
 Like Active Record, Mongoose provides us with a variety of helper methods that allow us to easily retrieve documents from our database.
 
 **Example Mongoose Queries**
@@ -392,6 +396,7 @@ var studentsController = {
 
 studentController.index();
 ```
+
 **Find One Example**
 
 ```js
@@ -416,7 +421,7 @@ Create methods for adding functionality to see all authors and find one author
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/d51081c0bf995bbd7f47883467da1c06a03de058)
 
-## Update (5 min)
+## I-Do: Update (5 min)
 
 ```js
   update: function(req, update){
@@ -441,7 +446,7 @@ Write an update method to edit an author in our database.
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/d51081c0bf995bbd7f47883467da1c06a03de058)
 
 
-## Delete (5 min)
+## I-Do: Delete (5 min)
 
 ```js
   destroy: function(req){
@@ -467,7 +472,7 @@ Write destroy methods to delete documents from our database
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/469d3c09059c60b7779a8c3a8c2fb12aefcc779a/controllers/authors.controller.js)
 
-## You-Do: Bonus: Adding and Deleting Embedded Documents  10 min)
+## You-Do: Bonus: Adding and Deleting Embedded Documents
 
 Work to Write Code to Add and Delete Reminders from an Author document
 
