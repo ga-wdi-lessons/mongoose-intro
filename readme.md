@@ -43,12 +43,15 @@ kitty.save(function (err) {
   console.log('meow');
 });
 ```
+<!-- AM: How exactly are you going to review the above example in-class? Might be useful to include the main takeaways here as notes in this section of the lesson plan, if there are any. -->
 
 ## You-Do - Step 1: Initial Set Up for Reminders (5 min)
 
 We will be creating a 2 model Todo App using Mongo/Mongoose. Authors have many Reminders.
 
 1. Fork and Clone this Repo:[https://github.com/ga-wdi-exercises/reminders_mongo]
+<!-- AM: Link formatting is a lil' funky here. -->
+
 2. Make sure to checkout locally to `mongoose` branch: `$ git checkout mongoose`
 
 [Starter Code](https://github.com/ga-wdi-exercises/reminders_mongo/tree/mongoose)
@@ -93,6 +96,7 @@ $ node db/schema.js
 ## You-Do - Step 2: Install Mongoose and Connection (5 min)
 
 Follow Instructions for `Step 2` on the `readme.md`
+<!-- AM: We are currently in "Step 2". I think you mean the previous section. -->
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/267a908faaae06ab4c35da6d671a867cf1bc6426/db/schema.js)
 
@@ -170,6 +174,8 @@ var StudentSchema = new Schema({
 ```
 >The projects key of your ProjectSchema documents will then be an instance of DocumentArray. This is a special subclassed Array that can deal with casting, and has special methods to work with embedded documents.
 
+<!-- AM: Some terms here whose definitions aren't immediately apparent: "casting", "subclassed" -->
+
 (+) Advantages:
 * Embedded Documents are easy and fast
 
@@ -196,6 +202,8 @@ var StudentSchema = new Schema({
 });
 
 ```
+<!-- AM: Might be helpful to explicitly define the arguments that go into `students` and `projects` in this examples (e.g., "What exactly is ref: 'Project'?")-->
+
 (+) Advantages:
 * Separate Collections offer greater flexibility with querying
 * Separate Collections might be a better decision for scaling- A document, including all its embedded documents and arrays, cannot exceed 16MB
@@ -215,10 +223,12 @@ We will be using `embedded` or sub documents today in class!
 ## You-Do: Step 3: Set Up Schema and Models (10 min)
 
 Follow Step 3 to step up your Reminder and Author Schemas and Models
+<!-- AM: Same deal as "Step 2" - aren't we on "Step 3" now? -->
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/cfee42d3cfd0bf5f2581cc61ba712eb8e1b7777f/db/schema.js)
 
 ## Create (10 min)
+<!-- AM: What type of section is this (guessing "I Do")? -->
 
 **Create Example:**
 
@@ -345,6 +355,8 @@ With most Mongoose Queries, we will be using a callback function, which will be 
 
 >With this callback function, the query will be executed immediately and the results are then passed into the callback
 
+<!-- AM: Good time to reference JS async as a reason why we're using callbacks. -->
+
 ## Break (10 min)
 
 ## You-Do - Step 4: Adds Seeds Data and Create New Documents (15 min)
@@ -433,6 +445,7 @@ Create methods for adding functionality to see all authors and find one author
 
 studentController.update({name: "becky"}, {name: "Sarah"});
 ```
+<!-- AM: Just so we're not listing code snippets in this section, it might be useful to include some notes (e.g., method definitions). Not essential, but noticed there were a lot of code snippets stringed together without commentary. -->
 
 ## You-Do: Step-6: Update Documents (10 min)
 
