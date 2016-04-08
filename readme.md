@@ -27,7 +27,7 @@ When would we use MongoDB (non-relational) versus PostgreSQL (relational)?
 
 ## http://mongoosejs.com
 
-Mongoose is an ORM, that allows us to encapsulate and model our data in our applications. It gives us access to additional helpers, functions, and queries to simply and easily preform CRUD actions.
+Mongoose is an ODM, that allows us to encapsulate and model our data in our applications. It gives us access to additional helpers, functions, and queries to simply and easily preform CRUD actions.
 
 Review example on [mongoosejs.com](http://mongoosejs.com)
 
@@ -111,7 +111,8 @@ Mongoose Schema Example:
 ```js
 
 // instantiate a name space for our Schema constructor defined by mongoose.
-var Schema = mongoose.Schema;
+var Schema = mongoose.Schema,
+  ObjectId = Schema.ObjectId
 
 var StudentSchema = new Schema({
   name: String,
@@ -140,9 +141,26 @@ Now, Let's add another model to our `db/schema.js`.
 
 We will be adding a schema now for `Project`, since I want to create an application that tracks Students and Projects.
 
-Similar to how you might think of a one to many relationship in a relational database, A Student will have many Projects. We will be accomplishing this relationship through `embedded` or `sub` documents.
+Similar to how you might think of a one to many relationship in a relational database, A Student will have many Projects.
 
-How can we describe this relationship in Mongoose?
+How did we describe this relationship in Active Record?
+
+>```ruby
+
+class Students < ActiveRecord::Base
+  has_many :projects
+end
+
+
+class Projects < ActiveRecord::Base
+  belongs_to :students
+end
+```
+
+How can we describe this relationship between Models in Mongoose?
+
+>We will be accomplishing this relationship through `embedded` or `sub` documents.
+
 
 ### Embedded Documents
 
@@ -607,3 +625,5 @@ Userschema.pre("save", function(next) {
 ### Additional Resources
 * [Mongoose Documention](http://mongoosejs.com/index.html)
 * [Embedded Docs versus Multiple Collections](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=mongoose%20embedded%20versus%20collections)
+* [Active Record Versus Mongoose]("active_record_comparison.md")
+* [ODM For Mongo and Rails](https://github.com/mongodb/mongoid)
