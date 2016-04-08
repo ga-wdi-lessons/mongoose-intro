@@ -145,7 +145,7 @@ Similar to how you might think of a one to many relationship in a relational dat
 
 How did we describe this relationship in Active Record?
 
->```ruby
+```ruby
 
 class Students < ActiveRecord::Base
   has_many :projects
