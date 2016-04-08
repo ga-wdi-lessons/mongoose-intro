@@ -343,7 +343,7 @@ for(var i = 0; i < students.length; i++){
     if (err){
       console.log(err)
     }else {
-      console.log("author was saved");
+      console.log("student was saved");
     }
   })
 };
@@ -479,7 +479,7 @@ Write an update method to edit an author in our database.
   }
 };
 
-authorsController.destroy({name: "bob"});
+studentsController.destroy({name: "bob"});
 ```
 
 ## Break (10 min)
