@@ -111,7 +111,8 @@ Mongoose Schema Example:
 ```js
 
 // instantiate a name space for our Schema constructor defined by mongoose.
-var Schema = mongoose.Schema;
+var Schema = mongoose.Schema,
+  ObjectId = Schema.ObjectId;
 
 var StudentSchema = new Schema({
   name: String,
@@ -119,6 +120,8 @@ var StudentSchema = new Schema({
 })
 
 ```
+>Mongo will add a primary key to each object, called `ObjectId`, referenced as `_id` in the data.
+
 **What are Mongoose Models?**
 
 * Mongoose Models will represent documents in our database. They are essentially constructors, which will allow us to preform CRUD actions with our MongoDB Database.
@@ -176,9 +179,9 @@ var StudentSchema = new Schema({
 (-) Disadvantages:
 * Overhead and Scalability. Can't exceed 16MD per document
 
-### Multiple Collections/Population
+### Multiple Collections/References
 
-[Population](http://mongoosejs.com/docs/populate.html)
+[References](https://docs.mongodb.org/manual/tutorial/model-referenced-one-to-many-relationships-between-documents/)
 
 Similar to how we added a foreign key in PostgreSQL, we can add references to documents in other collections by storing an array of `ObjectIds` referencing document ids from another Model
 
@@ -196,6 +199,8 @@ var StudentSchema = new Schema({
 });
 
 ```
+>Since we are using `_id` to refer to other objects, we use the `ObjectId` type in the Mongoose definition. The `ref` attribute must match exactly the `model name` in your model definition.
+
 (+) Advantages:
 * Separate Collections offer greater flexibility with querying
 * Separate Collections might be a better decision for scaling- A document, including all its embedded documents and arrays, cannot exceed 16MB
