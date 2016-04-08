@@ -143,7 +143,7 @@ We will be adding a schema now for `Project`, since I want to create an applicat
 
 Similar to how you might think of a one to many relationship in a relational database, A Student will have many Projects.
 
-How did we describe this relationship in Active Record?
+**How did we describe this relationship in Active Record?**
 
 ```ruby
 
@@ -157,7 +157,7 @@ class Projects < ActiveRecord::Base
 end
 ```
 
-How can we describe this relationship between Models in Mongoose?
+**How can we describe this relationship between Models in Mongoose?**
 
 >We will be accomplishing this relationship through `embedded` or `sub` documents.
 
@@ -502,7 +502,7 @@ Validators are defined at the field level of a document and are executed when th
 
 **Built in Validators:**
 
-* `required`: used to validate the field existence in Mongoose, which is placed in your schema in the field you want to validate.
+* `required`: used to validate the field existence in Mongoose, which is placed in your schema on the field you want to validate.
 
 Example: Let's say you want to verify the existence of a username field before you save the user document.
 
@@ -511,14 +511,13 @@ var UserSchema = new Schema({
   ...
   username: {
     type: String,
-    trim: true,
     unique: true,
     required: true
   }
 });
 
 ```
->This will validate the existence of the username field when saving the document, thus preventing the saving of any document that doesn't contain that field.
+>This will validate the existence and uniqueness of the username field when saving the document, thus preventing the saving of any document that doesn't contain that field.
 
 * `match`: type based validator for strings, placed in your fields for you schemas
 
@@ -528,19 +527,17 @@ Continuing off the above example, to validate your email field, you would need t
 var UserSchema = new Schema({
   username: {
     type: String,
-    trim: true,
     unique: true,
     required: true
   },
   email: {
     type: String,
-    index: true,
     match: /.+\@.+\..+/
   }
 });
 ```
 
->The usage of a match validator here will make sure the email field value matches the given regex expression, thus preventing the saving of any document where the e-mail doesn't conform to the right pattern.
+>The usage of a match validator here will make sure the email field value matches the given regex expression, thus preventing the saving of any document where the e-mail doesn't conform to a valid pattern!
 
 * `enum`: helps to define a set of strings that are only available for that field value.
 
@@ -548,13 +545,11 @@ var UserSchema = new Schema({
 var UserSchema = new Schema({
   username: {
     type: String,
-    trim: true,
     unique: true,
     required: true
   },
   email: {
     type: String,
-    index: true,
     match: /.+\@.+\..+/
   },
   role: {
@@ -568,9 +563,9 @@ var UserSchema = new Schema({
 
 **Custom Validations:**
 
-We can also define our own validators by using the validate property.
+We can also define our own validators by using the `validate property`.
 
-This validate property value is typically an array consisting of a validation function and an error message.
+This `validate property` value is typically an array consisting of a validation function.
 
 For example, if we want to validate the length of your user's password. To do so, you would have to make these changes in your UserSchema:
 
@@ -625,5 +620,5 @@ Userschema.pre("save", function(next) {
 ### Additional Resources
 * [Mongoose Documention](http://mongoosejs.com/index.html)
 * [Embedded Docs versus Multiple Collections](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=mongoose%20embedded%20versus%20collections)
-* [Active Record Versus Mongoose]("active_record_comparison.md")
+* [Active Record Versus Mongoose](active_record_comparison.md)
 * [ODM For Mongo and Rails](https://github.com/mongodb/mongoid)
