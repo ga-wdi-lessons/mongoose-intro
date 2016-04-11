@@ -15,6 +15,8 @@ Why are we learning MongoDB and Mongoose?
 
 >CRUD is something that is necessary in most every application out there. We have to create, read, update, and delete information all the time.
 
+> MongoDB stores JSON or Binary JSON (BSON), so it translates very well to a JS application when using Express!
+
 When would we use MongoDB (non-relational) versus PostgreSQL (relational)?
 
 >HINT theres not always a right answer!
@@ -27,7 +29,9 @@ When would we use MongoDB (non-relational) versus PostgreSQL (relational)?
 
 ## http://mongoosejs.com
 
-Mongoose is an ODM, that allows us to encapsulate and model our data in our applications. It gives us access to additional helpers, functions, and queries to simply and easily preform CRUD actions.
+Mongoose is an ODM (Object Data Mapping), that allows us to encapsulate and model our data in our applications. It gives us access to additional helpers, functions, and queries to simply and easily preform CRUD actions.
+
+`Mongoose` will provide us with the same functionality to interact with `MongoDB` and `Express` as `Active Record` did with `PostgreSQL` and `Rails`
 
 Review example on [mongoosejs.com](http://mongoosejs.com)
 
@@ -37,7 +41,7 @@ mongoose.connect('mongodb://localhost/test');
 
 var Cat = mongoose.model('Cat', { name: String });
 
-var kitty = new Cat({ name: 'Zildjian' });
+var kitty = new Cat({ name: 'Zilda' });
 kitty.save(function (err) {
   if (err) // ...
   console.log('meow');
@@ -46,7 +50,7 @@ kitty.save(function (err) {
 
 ## You-Do - Step 1: Initial Set Up for Reminders (5 min)
 
-We will be creating a 2 model Todo App using Mongo/Mongoose. Authors have many Reminders.
+We will be creating a 2 model Todo App using Mongoose and MongoDB. In this case, we will be creating two collections Authors and Reminders. Authors will have many Reminders
 
 1. Fork and Clone this Repo: https://github.com/ga-wdi-exercises/reminders_mongo
 2. Make sure to checkout locally to `mongoose` branch: `$ git checkout mongoose`
@@ -55,18 +59,21 @@ We will be creating a 2 model Todo App using Mongo/Mongoose. Authors have many R
 
 [Solution Code](https://github.com/ga-wdi-exercises/reminders_mongo/tree/mongoose-solution)
 
-## I-Do - Mongoose and Connection Set Up (5 min)
+## I-Do - Students & Projects Example: Mongoose and Connection Set Up (5 min)
+
 
 ```bash
 $ npm install mongoose --save
 ```
 
-The first thing we need to do is require mongoose in our project and open a connection to the test database on our locally
+In order to have access to `mongoose` in our application, we need to explicitly require mongoose and open a connection to the test database on our locally
 
 ```js
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/students');
 ```
+>The name above `students` will be the name of the database stored in MongoDB
+
 ```js
 
 var db = mongoose.connection;
@@ -92,7 +99,7 @@ $ node db/schema.js
 
 ## You-Do - Step 2: Install Mongoose and Connection (5 min)
 
-Follow Instructions for `Step 2` on the `readme.md`
+Follow Instructions for `Step 2` on the `readme.md` to require mongoose for our remindersa
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/267a908faaae06ab4c35da6d671a867cf1bc6426/db/schema.js)
 
@@ -120,7 +127,7 @@ var StudentSchema = new Schema({
 })
 
 ```
->Mongo will add a primary key to each object, called ObjectId, referenced as _id in the data.
+>Mongo will add a primary key to each object, called ObjectId, referenced as id in the data.
 
 **What are Mongoose Models?**
 
@@ -190,13 +197,15 @@ var StudentSchema = new Schema({
 ```
 >The projects key of your ProjectSchema documents will be a special array that has specific methods to work with embedded documents.
 
+>The Project Schema must be defined prior to our main Student Schema
+
 (+) Advantages:
 * Embedded Documents are easy and fast
 
 (-) Disadvantages:
-* Overhead and Scalability. Can't exceed 16MD per document
+* Overhead and Scaling. Can't exceed 16MB per document
 
-### Multiple Collections/References 
+### Multiple Collections/References
 
 [References](https://docs.mongodb.org/manual/tutorial/model-referenced-one-to-many-relationships-between-documents)
 
@@ -217,21 +226,14 @@ var StudentSchema = new Schema({
 
 ```
 
->Since we are using _id to refer to other objects, we use the ObjectId type in the Mongoose definition. The ref attribute must match exactly the model name in your model definition.
+>Since we are using id to refer to other objects, we use the ObjectId type in the Mongoose definition. The ref attribute must match exactly the model name in your model definition.
 
 (+) Advantages:
 * Could offer greater flexibility with querying
-* Might be a better decision for scaling- A document, including all its embedded documents and arrays, cannot exceed 16MB
+* Might be a better decision for scaling
 
 (-) Disadvantages:
-* Requires more work, need to find both documents that have the relationship(two separate queries)
-
-### When should I use one over the other?
-
-* Referencing separate collections are preferable if you need to select individual documents, need additional control over queries, or have large documents.
-
-* Smaller or fewer documents would be a better fit for embedded documents
-
+* Requires more work, need to find both documents that have the references(multiple queries)
 
 We will be using `embedded` or sub documents today in class!
 
@@ -241,7 +243,7 @@ Follow Step 3 to step up your Reminder and Author Schemas and Models
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/cfee42d3cfd0bf5f2581cc61ba712eb8e1b7777f/db/schema.js)
 
-## I-Do: Create (10 min)
+## I-Do: Create Example with Students and Projects (10 min)
 
 **Create Example:**
 
@@ -366,13 +368,13 @@ $ db.students.find()
 
 ### Callback Functions
 
-With most Mongoose Queries, we will be using a callback function, which will be called with two arguments (err, results)
+With most Mongoose Queries, we will be using a callback function, which will be called with two arguments (err, data)
 
->With this callback function, the query will be executed immediately and the results are then passed into the callback
+>With this callback function, the query will be executed immediately and the results or data are then passed into the callback
 
 Why are Callbacks Necessary?
 
->Async JS
+>Asynchronous JS!
 
 ## Break (10 min)
 
@@ -412,6 +414,8 @@ $ mkdir controllers
 $ touch controllers/studentsController.js
 ```
 
+>We are adding a `controllers` directory and `studentsController.js` file to mimic how we might define a controller in our Express application. Similar to how our controllers helped us in Rails, we will be following similar REST conventions and using our controllers to listen for incoming requests and communication with our database as necessary
+
 ```js
 var studentsController = {
   index: function(){
@@ -444,7 +448,7 @@ studentController.show({name: "becky"});
 
 ## You-Do: Step 5: Read (Index and Show) (10 min)
 
-Create methods for adding functionality to see all authors and find one author
+Create methods for `Index` and `Show` adding functionality to see all authors and find one author.
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/d51081c0bf995bbd7f47883467da1c06a03de058)
 
@@ -452,7 +456,7 @@ Create methods for adding functionality to see all authors and find one author
 
 ```js
   update: function(req, update){
-    StudentModel.findOneAndUpdate(req, update, {new: true}, function(err, docs){
+    StudentModel.findOneAndUpdate({name: req.name}, {name: update.name}, {new: true}, function(err, docs){
       if(err){
         console.log(err)
       }
@@ -465,6 +469,8 @@ Create methods for adding functionality to see all authors and find one author
 
 studentController.update({name: "becky"}, {name: "Sarah"});
 ```
+
+>We are inserting {new: true} as an additional option. If we do not, we will get the old document as a return value, not the updated one.
 
 ## You-Do: Step-6: Update Documents (10 min)
 
@@ -499,7 +505,25 @@ Write destroy methods to delete documents from our database
 
 [See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/469d3c09059c60b7779a8c3a8c2fb12aefcc779a/controllers/authors.controller.js)
 
-## You-Do: Bonus: Adding and Deleting Embedded Documents
+## Deleting Embedded Documents (5 min)
+
+```js
+removeProject: function(req, project){
+  StudentModel.findOneAndUpdate(req, {
+    $pull: { projects: {title: project} }
+  },
+  {new: true}, function(err, docs){
+    if(err){
+      console.log(err);
+    }
+    else{
+      console.log(docs);
+    }
+  });
+}
+```
+
+## You-Do: Bonus Embedded Documents
 
 Work to Write Code to Add and Delete Reminders from an Author document
 
@@ -511,9 +535,9 @@ Validators are defined at the field level of a document and are executed when th
 
 **Built in Validators:**
 
-* `required`: used to validate the field existence in Mongoose, which is placed in your schema on the field you want to validate.
+* `required` and `unique`: used to validate the field existence in Mongoose, which is placed in your schema on the field you want to validate.
 
-Example: Let's say you want to verify the existence of a username field before you save the user document.
+Example: Let's say you want to verify the existence of a username field and ensure it's unique before you save the user document.
 
 ```js
 var UserSchema = new Schema({
