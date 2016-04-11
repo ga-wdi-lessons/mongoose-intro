@@ -15,7 +15,7 @@ Why are we learning MongoDB and Mongoose?
 
 >CRUD is something that is necessary in most every application out there. We have to create, read, update, and delete information all the time.
 
-> MongoDB stores JSON or Binary JSON (BSON), so it translates very well to a JS application when using Express!
+> MongoDB stores Binary JSON (BJSON), so it translates very well to a JS application when using Express!
 
 When would we use MongoDB (non-relational) versus PostgreSQL (relational)?
 
@@ -31,7 +31,7 @@ When would we use MongoDB (non-relational) versus PostgreSQL (relational)?
 
 Mongoose is an ODM (Object Data Mapping), that allows us to encapsulate and model our data in our applications. It gives us access to additional helpers, functions, and queries to simply and easily preform CRUD actions.
 
-`Mongoose` will provide us with the same functionality to interact with `MongoDB` and `Express` as `Active Record` did with `PostgreSQL` and `Rails`
+`Mongoose` will provide us with the similar functionality to interact with `MongoDB` and `Express` as `Active Record` did with `PostgreSQL` and `Rails`
 
 Review example on [mongoosejs.com](http://mongoosejs.com)
 
@@ -166,10 +166,9 @@ class Projects < ActiveRecord::Base
 end
 ```
 
-**How can we describe this relationship between Models in Mongoose?**
+**How can we describe this similarly between Models in Mongoose?**
 
->We will be accomplishing this relationship through `embedded` or `sub` documents.
-
+>We will using `embedded` or `sub` documents.
 
 ### Embedded Documents
 
@@ -179,7 +178,8 @@ What are Embedded Documents?
 
 >Docs with schemas of their own which are elements of a parents document array,  contain all the same features as normal documents.
 
->The only difference is that embedded documents are not saved individually, they are saved whenever their top-level parent document is saved.
+>The only difference is that embedded documents will not be saved individually, they are saved whenever their top-level parent document is saved.
+
 
 ```js
 var ProjectSchema = new Schema({
