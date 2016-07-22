@@ -2,20 +2,18 @@
 
 ## Learning Objectives
 
-- Explain what is Mongoose
+- Explain what Mongoose is
 - Describe the role of Mongoose schema and models
-- Use Mongoose to preform CRUD functionality
+- Use Mongoose to perform CRUD functionality
 - List and describe common Mongoose queries
-- Persist data using Mongoose Embedded Documents
-- Describe how to use validations in mongoose
+- Persist data using Mongoose embedded documents
+- Describe how to use validations in Mongoose
 
 ## Opening Framing (10 minutes / 0:10)
 
 In previous WDI units you've used ActiveRecord to interact with and perform CRUD actions on a SQL database through a Ruby back-end. Today, we'll be doing the equivalent with a tool called Mongoose on a NoSQL database using a Node back-end.
 
-Before we dive into Mongoose, however, let's talk a bit about about last night's homework. You were tasked with looking through the Mongo lesson plan and familiarizing yourself with a NoSQL database.
-
-**What are some of your takeaways from the homework?**
+Before we dive into Mongoose, however, let's talk a bit about about last night's homework. You were tasked with looking through the Mongo lesson plan and familiarizing yourself with a NoSQL database. **What are some of your takeaways?**
 
 #### What is a NoSQL database?
 
@@ -49,7 +47,7 @@ Even though you won't be writing much Mongo in WDI, we will be using some MongoD
 * `show collections` - List the collections in a database
 * `db.students.find()` - List all students in a student collection
 
-## Mongoose (5 minutes  0:15)
+## Mongoose (5 minutes / 0:15)
 
 ![mongoose.js](https://www.filepicker.io/api/file/KDQZV88GTIaQn6p0GagE)
 
