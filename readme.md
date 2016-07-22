@@ -1,39 +1,77 @@
-# Mongoose-Intro
+# Intro to Mongoose
 
 ## Learning Objectives
 
-- Explain what is Mongoose
-- Describe the role of Mongoose schema and models
-- Use Mongoose to preform CRUD functionality
-- List and describe common Mongoose queries
-- Persist data using Mongoose Embedded Documents
-- Describe how to use validations in mongoose
+- Differentiate between NoSQL and SQL databases.
+- Explain what Mongoose is.
+- Describe the role of Mongoose schema and models.
+- Use Mongoose to perform CRUD functionality.
+- List and describe common Mongoose queries.
+- Persist data using Mongoose embedded documents.
+- Describe how to use validations in Mongoose.
 
-## Opening Framing (5 min)
+## Opening Framing (10 minutes / 0:10)
 
-Why are we learning MongoDB and Mongoose?
+In previous WDI units you've used ActiveRecord to interact with and perform CRUD actions on a SQL database through a Ruby back-end. Today, we'll be doing the equivalent with a tool called Mongoose on a NoSQL database using a Node back-end.
 
->CRUD is something that is necessary in most every application out there. We have to create, read, update, and delete information all the time.
+Before we dive into Mongoose, however, let's talk a bit about about last night's homework. You were tasked with looking through the Mongo lesson plan and familiarizing yourself with a NoSQL database. **What are some of your takeaways?**
 
-> MongoDB stores Binary JSON (BJSON), so it translates very well to a JS application when using Express!
+#### What is a NoSQL database?
 
-When would we use MongoDB (non-relational) versus PostgreSQL (relational)?
+A NoSQL database is a non-relational database.
+* This means no explicit one-to-one, one-to-many and many-to-many relationships.
+* That being said, we can emulate these relationships in a NoSQL database.
 
->HINT theres not always a right answer!
+#### How is a NoSQL database organized?
+
+A NoSQL database can be organized into **documents** and **collections**.
+* Collections are the NoSQL equivalent of tables in a SQL database.
+* Documents are the NoSQL equivalent of a table row.
+
+> This is not the only way that a NoSQL database organizes data. Start [here](http://rebelic.nl/2011/05/28/the-four-categories-of-nosql-databases/) to learn more.
+
+#### What is MongoDB?
+
+A NoSQL database that stores information as JSON.
+* Technically, it's BJSON -- "binary JSON."
+* Think of this as taking the place of Postgres.
+
+#### Why use NoSQL/Mongo over SQL?
+
+It's flexible.
+* You don't need to follow a schema if you don't want to. This might be helpful with non-uniform data.
+* That being said, you can enforce consistency using schemas. In fact, we'll be doing that in today's class.
+
+It's fast.
+* Data is "denormalized" in a NoSQL data, meaning that it's all in the same place.
+* For example, a post's comments will be nested directly within the post in the database.
+* This is unlike a relational database, in which we need to make queries to retrieve data connected through a relation.
+
+Many web apps already implement object-oriented Javascript.
+* If we're using objects in both the back-end and front-end, that makes handling and sending data between the client and a database much easier.
+* No need for type conversion (e.g., making sure a Ruby hash is being served as JSON).
+
+#### What are some example MongoDB commands?
+
+Even though you won't be writing much Mongo in WDI, we will be using some MongoDB CLI commands to test what's in our database in this class. Examples include...
+* `show dbs` - Show a list of all databases
+* `use database-name` - Connect to a database
+* `show collections` - List the collections in a database
+* `db.students.find()` - List all students in a student collection
+
+## Mongoose (5 minutes / 0:15)
 
 ![mongoose.js](https://www.filepicker.io/api/file/KDQZV88GTIaQn6p0GagE)
 
-## Mongoose (5 min)
+> "Let's face it, writing MongoDB validation, casting and business logic boilerplate is a drag. That's why we wrote Mongoose."
 
->"Let's face it, writing MongoDB validation, casting and business logic boilerplate is a drag. That's why we wrote Mongoose."
+Mongoose is an ODM (Object Data Mapping), that allows us to encapsulate and model our data in our applications. It gives us access to additional helpers, functions and queries to simply and easily preform CRUD actions.
 
-## http://mongoosejs.com
+Mongoose will provide us with the similar functionality to interact with MongoDB and Express as Active Record did with PostgreSQL and Rails.
 
-Mongoose is an ODM (Object Data Mapping), that allows us to encapsulate and model our data in our applications. It gives us access to additional helpers, functions, and queries to simply and easily preform CRUD actions.
+> Active Record is an ORM (Object Relational Mapping). An ODM is the same thing without relations.
 
-`Mongoose` will provide us with the similar functionality to interact with `MongoDB` and `Express` as `Active Record` did with `PostgreSQL` and `Rails`
-
-Review example on [mongoosejs.com](http://mongoosejs.com)
+Here's an example of some Mongoose code pulled from  [their documentation](http://mongoosejs.com).
 
 ```js
 var mongoose = require('mongoose');
@@ -48,46 +86,58 @@ kitty.save(function (err) {
 });
 ```
 
-## You-Do - Step 1: Initial Set Up for Reminders (5 min)
+## You Do: Initial Set Up for Reminders (5 minutes / 0:20)
 
-We will be creating a 2 model Todo App using Mongoose and MongoDB. In this case, we will be creating two collections Authors and Reminders. Authors will have many Reminders
+During today's in-class exercises, you will be creating a two-model Todo App using Mongoose and MongoDB. In this case, we will be creating two collections Authors and Reminders.
 
-1. Fork and Clone this Repo: https://github.com/ga-wdi-exercises/reminders_mongo
-2. Make sure to checkout locally to `mongoose` branch: `$ git checkout mongoose`
+Authors will have many Reminders, although we won't be implementing that using a SQL relationship.
 
-[Starter Code](https://github.com/ga-wdi-exercises/reminders_mongo/tree/mongoose)
+Follow these steps...
+  1. Fork and Clone [this repo](https://github.com/ga-wdi-exercises/reminders_mongo).
+  2. Make sure to checkout locally to the `mongoose` branch: `$ git checkout mongoose`
+  3. Also make sure you are running `$ mongod` in a separate Terminal tab.
 
-[Solution Code](https://github.com/ga-wdi-exercises/reminders_mongo/tree/mongoose-solution)
+> [Starter Code](https://github.com/ga-wdi-exercises/reminders_mongo/tree/mongoose)
+>
+> [Solution Code](https://github.com/ga-wdi-exercises/reminders_mongo/tree/mongoose-solution)
 
-## I-Do - Students & Projects Example: Mongoose and Connection Set Up (5 min)
+## I Do: Mongoose and Connection Set Up (5 minutes / 0:25)
 
+For today's in-class demonstrations, we will be creating an app that uses two models: Students and Projects. After each demo, you will apply the same functionality to your Todo app.
+
+Let's begin by installing Mongoose...
 
 ```bash
-$ npm install mongoose --save
+$ npm install --save mongoose
 ```
 
 In order to have access to `mongoose` in our application, we need to explicitly require mongoose and open a connection to the test database on our locally
 
 ```js
+// db/schema.js
+
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/students');
 ```
->The name above `students` will be the name of the database stored in MongoDB
+
+> The name above `students` will be the name of the database stored in MongoDB
 
 ```js
+// db/schema.js
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/students');
 
+// Now that we're connected, let's save that connection to the database in a variable.
 var db = mongoose.connection;
 
-// will console.log an error if db cannot connect to MongoDB
+// Will log an error if db can't connect to MongoDB
 db.on('error', function(err){
   console.log(err);
 });
-// will console.log "database has been connected" if successfully connects
+
+// Will log "database has been connected" if it successfully connects.
 db.once('open', function() {
   console.log("database has been connected!");
-
-  // INSERT CODE HERE!
-
 });
 ```
 
@@ -97,65 +147,75 @@ Now let's run our `db/schema.js` file:
 $ node db/schema.js
 ```
 
-## You-Do - Step 2: Install Mongoose and Connection (5 min)
+## You Do: Install Mongoose and Connection (5 min / 0:30)
 
-Follow Instructions for `Step 2` on the `readme.md` to require mongoose for our remindersa
+Follow the instructions in the previous section to require mongoose in your Reminders app.
 
-[See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/267a908faaae06ab4c35da6d671a867cf1bc6426/db/schema.js)
+> [Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/267a908faaae06ab4c35da6d671a867cf1bc6426/db/schema.js)
 
-## I-Do - Mongoose Schema & Models (10 min)
+## I Do: Mongoose Schema & Models (10 minutes / 0:40)
 
-**What is a Mongoose Schema?**
+#### What is a Mongoose Schema?
 
 * Everything in Mongoose starts with a Schema!
+* Schemas are used to define attributes and structure for our documents.
+* Each Schema maps to a MongoDB collection and defines the shape of the documents within that collection.
 
-* Schemas are used to define attributes and structure for our documents
-
-* Each Schema maps to a MongoDB collection and defines the shape of the documents within that collection
-
-Mongoose Schema Example:
+Here's an example of a Mongoose schema...
 
 ```js
+// db/schema.js
 
-// instantiate a name space for our Schema constructor defined by mongoose.
-var Schema = mongoose.Schema,
-  ObjectId = Schema.ObjectId
+// First, we instantiate a namespace for our Schema constructor defined by mongoose.
+var Schema = mongoose.Schema
+var ObjectId = Schema.ObjectId
 
 var StudentSchema = new Schema({
   name: String,
   age: Number
-})
+});
 
+var ProjectSchema = new Project({
+  title: String,
+  unit: String
+});
 ```
->Mongo will add a primary key to each object, called ObjectId, referenced as id in the data.
 
-**What are Mongoose Models?**
+> Mongo will add a primary key to each object using `ObjectId`. This will be referenced as `id` in the data, just like in Rails.
 
-* Mongoose Models will represent documents in our database. They are essentially constructors, which will allow us to preform CRUD actions with our MongoDB Database.
+#### What are Mongoose Models?
 
-* Models are defined by passing a Schema instance to mongoose.model.
+Mongoose Models will represent documents in our database.
+* They are essentially constructors, which will allow us to preform CRUD actions with our MongoDB Database.
+* Models are defined by passing a Schema instance to `mongoose.model`.
 
 ```js
-var StudentModel = mongoose.model("Student", StudentSchema)
+// db/schema.js
+
+var Schema = mongoose.Schema
+var ObjectId = Schema.ObjectId
+
+var StudentSchema = new Schema({
+  name: String,
+  age: Number
+});
+
+var Student = mongoose.model("Student", StudentSchema);
 ```
->The .model() function makes a copy of schema. Make sure that you've added everything you want to schema before calling .model()!
 
->The first argument is the singular name of the collection your model is for. Mongoose automatically looks for the plural version of your model name.
+`.model()` makes a copy of schema.
+* The first argument is the singular name of the collection your model is for. Mongoose automatically looks for the plural version of your model name.
+* That means the model `Student` is for the `students` collection in the database.
 
->The model `Student` is for the `students` collection in the database.
-
-## Embedded Documents VS References between Collections (10 min)
+## Collections: Embedded Documents & References (10 minutes / 0:50)
 
 Now, Let's add another model to our `db/schema.js`.
+* We will be adding a schema now for `Project`, since I want to create an application that tracks Students and Projects.
+* Like a one-to-many relationship in a relational database, a Student will have many Projects.
 
-We will be adding a schema now for `Project`, since I want to create an application that tracks Students and Projects.
+With ActiveRecord, we defined a one-to-many relationship like so...
 
-Similar to how you might think of a one to many relationship in a relational database, A Student will have many Projects.
-
-**How did we describe this relationship in Active Record?**
-
-```ruby
-
+```rb
 class Students < ActiveRecord::Base
   has_many :projects
 end
@@ -166,27 +226,21 @@ class Projects < ActiveRecord::Base
 end
 ```
 
-**How can we describe this similarly between Models in Mongoose?**
-
->We will using `embedded` or `sub` documents.
+In Mongoose, we will do this using **embedded documents**.
 
 ### Embedded Documents
 
-[Embedded Documents](http://mongoosejs.com/docs/2.7.x/docs/embedded-documents.html)
-
-What are Embedded Documents?
-
->Docs with schemas of their own which are elements of a parents document array,  contain all the same features as normal documents.
-
->The only difference is that embedded documents will not be saved individually, they are saved whenever their top-level parent document is saved.
-
+[Embedded Documents](http://mongoosejs.com/docs/2.7.x/docs/embedded-documents.html) -- sometimes referred to as "sub-documents" -- are schemas of their own which are elements of a parent document's array
+* They contain all the same features as normal documents.
+* The only difference is that embedded documents will not be saved individually, they are saved whenever their top-level parent document is saved.
 
 ```js
+// db/schema.js
+
 var ProjectSchema = new Schema({
   title: String,
   unit: String
 })
-
 
 var StudentSchema = new Schema({
   name: String,
@@ -194,24 +248,30 @@ var StudentSchema = new Schema({
   projects: [ProjectSchema]
 })
 
+var Student = mongoose.model("Student", StudentSchema);
+var Project = mongoose.model("Project", ProjectSchema);
+
 ```
->The projects key of your ProjectSchema documents will be a special array that has specific methods to work with embedded documents.
+> The projects key of your `ProjectSchema` documents will contain a special array that has specific methods to work with embedded documents.
+>
+> The Project Schema must be defined prior to our main Student Schema.
 
->The Project Schema must be defined prior to our main Student Schema
+#### Advantages
+* Easy to conceptualize and set up.
+* Can be accessed quickly.
 
-(+) Advantages:
-* Embedded Documents are easy and fast
+#### Disadvantages
+* Don't scale well. Documents cannot exceed 16MB in size.
 
-(-) Disadvantages:
-* Overhead and Scaling. Can't exceed 16MB per document
+> If you find that you are nesting documents within documents for 3+ levels, you should probably look into a relational database.
 
-### Multiple Collections/References
+### Multiple Collections & References
 
-[References](https://docs.mongodb.org/manual/tutorial/model-referenced-one-to-many-relationships-between-documents)
-
-Similar to how we added a foreign key in PostgreSQL, we can add `references` to documents in other collections by storing an array of `ObjectIds` referencing document ids from another Model
+Similar to how we use foreign keys to represent a one-to-many relationship in Postgres, we can add `[references](https://docs.mongodb.org/manual/tutorial/model-referenced-one-to-many-relationships-between-documents)` to documents in other collections by storing an array of `ObjectIds` referencing document ids from another model.
 
 ```js
+// db/schema.js
+
 var ProjectSchema = new Schema({
   title: String,
   unit: String,
@@ -221,295 +281,340 @@ var ProjectSchema = new Schema({
 var StudentSchema = new Schema({
   name: String,
   age: Number,
-  projects: [ {type: Schema.ObjectId, ref: "Project"} ]
+  projects: [ {type: Schema.ObjectId, ref: "Project"}]
 });
 
+var Student = mongoose.model("Student", StudentSchema);
+var Project = mongoose.model("Project", ProjectSchema);
 ```
 
->Since we are using id to refer to other objects, we use the ObjectId type in the Mongoose definition. The ref attribute must match exactly the model name in your model definition.
+> Since we are using an id to refer to other objects, we use the ObjectId type in the schema definition. The `ref` attribute must match the model used in the definition.
 
-(+) Advantages:
-* Could offer greater flexibility with querying
-* Might be a better decision for scaling
+#### Advantages
+* Could offer greater flexibility with querying.
+* Might be a better decision for scaling.
 
-(-) Disadvantages:
-* Requires more work, need to find both documents that have the references(multiple queries)
+#### Disadvantages
+* Requires more work. Need to find both documents that have the references (i.e., multiple queries).
 
-We will be using `embedded` or sub documents today in class!
+## You Do: Set Up Schema and Models for Reminders (10 minutes / 1:00)
 
-## You-Do: Step 3: Set Up Schema and Models (10 min)
+Use the previous section to step up your Reminder and Author schemas and models.
 
-Follow Step 3 to step up your Reminder and Author Schemas and Models
+> [Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/cfee42d3cfd0bf5f2581cc61ba712eb8e1b7777f/db/schema.js)
 
-[See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/cfee42d3cfd0bf5f2581cc61ba712eb8e1b7777f/db/schema.js)
+## Break (10 minutes / 1:10)
 
-## I-Do: Create Example with Students and Projects (10 min)
+## I Do: Create with Students and Projects (10 minutes / 1:20)
 
-**Create Example:**
+First let's create an instance of our Student model. Here's one way of doing it...
 
 ```js
+// db/schema.js
 
+// First we create a new student. It's just like generating a new instance with a constructor function!
 var anna = new Student({name: "Anna", age: 30});
 
-anna.save(function(err, person){
+// Then we save it to the database using .save
+anna.save(function(err, student){
   if(err){
     console.log(err);
   }
   else{
-    console.log(person);
+    console.log(student);
   }
 });
+```
 
-// OR
+> You can compare this to `.new` and `.save` in ActiveRecord.
 
-Student.create({ name: 'Anna', age: 30 }, function (err, person) {
+We can also consolidate that into a single `.create` method, like so...
+
+```js
+// db/schema.js
+
+Student.create({ name: 'Anna', age: 30 }, function (err, student) {
   if (err){
     console.log(err);
   }
   else{
-    console.log(person);
+    console.log(student);
   }
 });
 ```
 
-**Embedded Documents Example**
+#### Add Embedded Documents
+
+Next, let's create a Project...
 
 ```js
-var project1 = new ProjectModel({title: "memory game", unit: "JS"});
+// db/schema.js
 
-becky.projects.push(project1)
-becky.save(function(err, student){
+var anna = new Student({name: "Anna", age: 30});
+var project1 = new Project({title: "memory game", unit: "JS"});
+
+// Now we add that project to a student's collection / array of projects.
+anna.projects.push(project1)
+
+// In order to save that project to the student, we need to call `.save` on the student -- not the project.
+anna.save(function(err, student){
   if(err){
     console.log(err)
-  }
-  else{
+  } else {
     console.log(student + " was saved to our db!");
   }
 });
 ```
 
-## Seeds Data (10 min)
+## Seed Data (10 minutes / 1:30)
 
-We need to make sure we can connect our `schema.js` file to our `seeds.js`.
-
-In order to do that we need to add the following in our `db/schema.js`:
+Let's seed some data in our database. In order to do that, we need to first make sure we can connect `schema.js` to `seeds.js`. Let's add the following to `db/schema.js`...
 
 ```js
+// db/schema.js
 
-module.exports ={
-  StudentModel: StudentModel,
-  ProjectModel: ProjectModel
+// The rest of our schema code is up here...
+
+// By adding `module.exports`, we can know reference these models in other files by requiring `schema.js`.
+module.exports = {
+  Student: Student,
+  Project: Project
 };
-
 ```
 
-And add the following in `db/seeds.js`:
+And add the following to `db/seeds.js`...
 
 ```js
+// db/seeds.js
 
 var mongoose = require('mongoose');
-var Schema = require("../db/schema.js");
+var Schema = require("./schema.js");
 
-var StudentModel = Schema.StudentModel
-var ProjectModel = Schema.ProjectModel
+var Student = Schema.Student
+var Project = Schema.Project
 ```
 
-**Seeds Data:**
-
-In `db/seeds.js`:
+Now let's call some methods in `db/schema.js` that will populate our database...
 
 ```js
+// db/seeds.js
+
 var mongoose = require('mongoose');
-var Schema = require("../db/schema.js");
+var Schema = require("./schema.js");
 
-var StudentModel = Schema.StudentModel
-var ProjectModel = Schema.ProjectModel
+var Student = Schema.Student
+var Project = Schema.Project
 
-StudentModel.remove({}, function(err){
+// First we clear the database of existing students and projects.
+Student.remove({}, function(err){
   console.log(err)
 });
-ProjectModel.remove({}, function(err){
+
+Project.remove({}, function(err){
   console.log(err)
 });
 
-var becky = new StudentModel({name: "becky"})
-var brandon = new StudentModel({name: "brandon"})
-var tom = new StudentModel({name: "tom"})
+// Now we generate instances of Student and Project.
+var becky = new Student({name: "becky"})
+var brandon = new Student({name: "brandon"})
+var tom = new Student({name: "tom"})
 
-var project1 = new ProjectModel({title: "project1!!", unit: "JS"})
-var project2 = new ProjectModel({title: "project2!!", unit: "Rails"})
-var project3 = new ProjectModel({title: "project3!!", unit: "Angular"})
-var project4 = new ProjectModel({title: "project4!!", unit: "Express"})
+var project1 = new Project({title: "project1!!", unit: "JS"})
+var project2 = new Project({title: "project2!!", unit: "Rails"})
+var project3 = new Project({title: "project3!!", unit: "Angular"})
+var project4 = new Project({title: "project4!!", unit: "Express"})
 
 var students = [becky, brandon, tom]
 var projects = [project1, project2, project3, project4]
 
+// Here we assign some projects to each student.
 for(var i = 0; i < students.length; i++){
-  students[i].projects.push(projects[i], projects[i+2])
-  students[i].save(function(err){
+  students[i].projects.push(projects[i], projects[i+1])
+  students[i].save(function(err, student){
     if (err){
       console.log(err)
-    }else {
-      console.log("student was saved");
+    } else {
+      console.log(student);
     }
   })
 };
 
 ```
-**Now Let's Test it out in the Command Line!**
+
+Let's test if this all worked by opening Mongo in the Terminal...
 
 ```bash
 $ mongo
 $ show dbs
-$ use test
+$ use students
 $ show collections
 $ db.students.find()
 ```
 
 ### Callback Functions
 
-With most Mongoose Queries, we will be using a callback function, which will be called with two arguments (err, data)
+Oftentimes, when making a Mongoose query we will pass in a callback function. It will be passed two arguments: `err` and `data`.
+* `data` contains the result of the Mongoose query.
 
->With this callback function, the query will be executed immediately and the results or data are then passed into the callback
+<details>
 
-Why are Callbacks Necessary?
+  <summary>Q: Why do you think callbacks might be necessary when using Mongoose?</summary>
 
->Asynchronous JS!
+  > Because these queries are asynchronous! We want to make sure the query has finished before we run any code that depends on the result.
 
-## Break (10 min)
+</details>
 
-## You-Do - Step 4: Adds Seeds Data and Create New Documents (15 min)
+## You Do: Add Seed Data and Create to Reminders (15 minutes / 1:45)
 
-Add seeds data to create new documents in our reminders MongoDB database!
+Now do the same thing with your Reminders app.
 
-[See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/9b5a93841df550516e04778066cb43bd790c11f8)
+> [Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/9b5a93841df550516e04778066cb43bd790c11f8)
 
-
-## Mongoose Queries (10 min)
-
-[Mongoose Queries Documentation](http://mongoosejs.com/docs/api.html#query-js)
+## Mongoose Queries (10 minutes / 1:55)
 
 Like Active Record, Mongoose provides us with a variety of helper methods that allow us to easily retrieve documents from our database.
 
-**Example Mongoose Queries**
+> Explore them using the [Mongoose Queries Documentation](http://mongoosejs.com/docs/api.html#query-js).
 
 ```js
-// finds all documents of specified model type can also use to specify key value pair in query
+// Finds all documents of a specified model type. We can pass in a key-value pair(s) to narrow down the search.
 Model.find({}, callback)
 
-// finds model by id
+// Finds a single model by its id.
 Model.findById(someId, callback)
 
-// finds model by match a key value
+// Find a single model using a key-value pair(s).
 Model.findOne({someKey: someValue}, callback)
 
-// removes document that match key value
+// Removes documents that match a key-value pair(s).
 Model.remove({someKey: someValue}, callback)
 ```
 
-**Find All Example**
+Let's use `.find` to implement `index` functionality. We'll do that in a controller file...
 
 ```bash
 $ mkdir controllers
 $ touch controllers/studentsController.js
 ```
 
->We are adding a `controllers` directory and `studentsController.js` file to mimic how we might define a controller in our Express application. Similar to how our controllers helped us in Rails, we will be following similar REST conventions and using our controllers to listen for incoming requests and communication with our database as necessary
+> We are adding a `controllers` directory and `studentsController.js` file to mimic how we might define a controller in an Express application. Like how our controllers helped us in Rails, we will be following similar REST conventions and using our controllers to listen for incoming requests and communication with our database.
 
 ```js
+// controllers/studentsController.js
+
+var Schema = require("../db/schema.js");
+var Student = Schema.Student;
+var Project = Schema.Project;
+
 var studentsController = {
   index: function(){
-    StudentModel.find({}, function(err, docs){
+    Student.find({}, function(err, docs){
       console.log(docs);
     });
   }
 };
 
-studentController.index();
+studentsController.index();
 ```
 
-**Find One Example**
+Now let's do `show`...
 
 ```js
-var studentController = {
+// controllers/studentsController.js
+
+var studentsController = {
   index: function(){
-    StudentModel.find({}, function(err, docs){
+    Student.find({}, function(err, docs){
       console.log(docs);
     });
   },
   show: function(req){
-    StudentModel.findOne({"name": req.name}, function(err, docs){
+    Student.findOne({"name": req.name}, function(err, docs){
       console.log(docs);
     });
   }
 };
-studentController.show({name: "becky"});
+
+studentsController.show({name: "becky"});
 ```
 
-## You-Do: Step 5: Read (Index and Show) (10 min)
+## You Do: Index, Show, Update and Delete (15 minutes / 2:10)
 
-Create methods for `Index` and `Show` adding functionality to see all authors and find one author.
+Follow the above instructions to implement `index` and `show` for the Author model.
 
-[See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/d51081c0bf995bbd7f47883467da1c06a03de058)
+Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) to figure out how to update and delete authors. If the documentation proves difficult to navigate, don't be afraid to Google it! We'll go over how to update and delete after the exercise...
 
-## I-Do: Update (5 min)
+> [Index/Read Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/d51081c0bf995bbd7f47883467da1c06a03de058)
+> [Update Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/d51081c0bf995bbd7f47883467da1c06a03de058)
+> [Delete Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/469d3c09059c60b7779a8c3a8c2fb12aefcc779a/controllers/authors.controller.js)
+
+## Break (5 minutes / 2:15)
+
+## I Do: Update & Delete (10 minutes / 2:25)
+
+<details>
+  <summary>**This is how to update...**</summary>
+
+  ```js
+  // controllers/studentsController.js
+  var studentsController = {
+
+    // This method takes two arguments: (1) the old instance and (2) what we want to update it with.
+    update: function(req, update){
+      Student.findOneAndUpdate({name: req.name}, {name: update.name}, {new: true}, function(err, docs){
+        if(err) {
+          console.log(err)
+        }
+        else {
+          console.log(docs);
+        }
+      });
+    }
+  };
+
+  studentsController.update({name: "becky"}, {name: "Sarah"});
+  ```
+
+  > We are inserting {new: true} as an additional option. If we do not, we will get the old document as a return value -- not the updated one.
+
+</details>
+
+<details>
+
+  <summary>**This is how to delete...**</summary>
+
+  ```js
+  // controllers/studentsController.js
+
+  var studentsController = {
+    destroy: function(req){
+      Student.findOneAndRemove(req, function(err, docs){
+        if(err){
+          console.log(err);
+        }
+        else{
+          console.log(docs);
+        }
+      });
+    }
+  };
+
+  studentsController.destroy({name: "bob"});
+  ```
+
+</details>
+
+> Don't look at these while working on the previous exercise!
+
+-----
+
+## Deleting Embedded Documents (Bonus)
 
 ```js
-  update: function(req, update){
-    StudentModel.findOneAndUpdate({name: req.name}, {name: update.name}, {new: true}, function(err, docs){
-      if(err){
-        console.log(err)
-      }
-      else{
-        console.log(docs);
-      }
-    });
-  }
-};
+// controllers/studentsController.js
 
-studentController.update({name: "becky"}, {name: "Sarah"});
-```
-
->We are inserting {new: true} as an additional option. If we do not, we will get the old document as a return value, not the updated one.
-
-## You-Do: Step-6: Update Documents (10 min)
-
-Write an update method to edit an author in our database.
-
-[See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/d51081c0bf995bbd7f47883467da1c06a03de058)
-
-
-## I-Do: Delete (5 min)
-
-```js
-  destroy: function(req){
-    StudentModel.findOneAndRemove(req, function(err, docs){
-      if(err){
-        console.log(err);
-      }
-      else{
-        console.log(docs);
-      }
-    });
-  }
-};
-
-studentsController.destroy({name: "bob"});
-```
-
-## Break (10 min)
-
-## You-Do: Step-7: Delete Documents (10 min)
-
-Write destroy methods to delete documents from our database
-
-[See Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/469d3c09059c60b7779a8c3a8c2fb12aefcc779a/controllers/authors.controller.js)
-
-## Deleting Embedded Documents (5 min)
-
-```js
 removeProject: function(req, project){
-  StudentModel.findOneAndUpdate(req, {
+  Student.findOneAndUpdate(req, {
     $pull: { projects: {title: project} }
   },
   {new: true}, function(err, docs){
@@ -523,13 +628,13 @@ removeProject: function(req, project){
 }
 ```
 
-## You-Do: Bonus Embedded Documents
+## You Do: Embedded Documents (Bonus)
 
-Work to Write Code to Add and Delete Reminders from an Author document
+Add code to add and delete Reminders from an Author document.
 
-## Validations (10 min)
+## Validations (Bonus)
 
-Mongoose contains built in validators and an option to create custom validators as well.
+Mongoose contains built-in validators and an option to create custom validators as well.
 
 Validators are defined at the field level of a document and are executed when the document is being saved. If a validation error occurs, the save operation is aborted and the error is passed to the callback.
 
@@ -594,7 +699,7 @@ var UserSchema = new Schema({
 ```
 >By Adding in `enum`, we are adding a validation to ensure only these three possible strings are saved in the document.
 
-**Custom Validations:**
+### Custom Validations
 
 We can also define our own validators by using the `validate property`.
 
@@ -622,9 +727,8 @@ var UserSchema = new Schema({
 
 By using `.pre`, these are executed before validations.
 
-
 ```js
-Userschema.pre("save", function(next) {
+UserSchema.pre("save", function(next) {
     var self = this;
 
     UserModel.findOne({email : this.email}, 'email', function(err, results) {
@@ -641,17 +745,24 @@ Userschema.pre("save", function(next) {
 });
 
 ```
-## Closing (5 min)
 
-### Quiz Questions
+-----
+
+## Closing / Questions
+
 * How is Mongoose used to interact with MongoDB?
 * What are embedded documents in Mongoose?
 * Why do we create a Schema in Mongoose?
 * What do we need after Mongoose queries?
 * What are common built in validations for Mongoose? Why would we use them?
 
-### Additional Resources
-* [Mongoose Documention](http://mongoosejs.com/index.html)
+## Homework
+
+After this class you should be able to complete [Emergency Compliment](https://github.com/ga-wdi-exercises/compliment-express) and Part I of [YUM](https://github.com/ga-wdi-exercises/yum).
+
+## Additional Resources
+
+* [Mongoose Documentation](http://mongoosejs.com/index.html)
 * [Embedded Docs versus Multiple Collections](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=mongoose%20embedded%20versus%20collections)
 * [Active Record Versus Mongoose](active_record_comparison.md)
 * [ODM For Mongo and Rails](https://github.com/mongodb/mongoid)
