@@ -40,10 +40,13 @@ It's flexible.
 * That being said, you can enforce consistency using schemas. In fact, we'll be doing that in today's class.
 
 It's fast.
+* Data is "denormalized" in a NoSQL data, meaning that it's all in the same place
+* For example, a post's comments will be nested direclty within the post in the database).
+* Unlike a relational database, in which we need to make queries to retrieve data connected through a relation.
 
 Many web apps implement object-oriented Javascript.
 * If we're using objects in both the back-end and front-end, that makes handling and sending data between the client and a database much easier.
-* No need for type conversion.
+* No need for type conversion (e.g., making sure a Ruby hash is being served as JSON).
 
 #### What are some example MongoDB commands?
 
