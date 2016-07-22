@@ -1,5 +1,3 @@
-
-
 # Intro to Mongoose
 
 ## Learning Objectives
@@ -18,8 +16,6 @@ In previous WDI units you've used ActiveRecord to interact with and perform CRUD
 Before we dive into Mongoose, however, let's talk a bit about about last night's homework. You were tasked with looking through the Mongo lesson plan and familiarizing yourself with a NoSQL database.
 
 **What are some of your takeaways from the homework?**
-
-### HW Takeaways
 
 #### What is a NoSQL database?
 
