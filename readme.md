@@ -755,6 +755,10 @@ UserSchema.pre("save", function(next) {
 * What do we need after Mongoose queries?
 * What are common built in validations for Mongoose? Why would we use them?
 
+## Homework
+
+[YUM](https://github.com/ga-wdi-exercises/yum)!
+
 ## Additional Resources
 
 * [Mongoose Documentation](http://mongoosejs.com/index.html)
