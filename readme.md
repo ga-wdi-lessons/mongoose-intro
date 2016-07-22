@@ -83,6 +83,7 @@ Authors will have many Reminders, although we won't be implementing that using a
 Follow these steps...
   1. Fork and Clone [this repo](https://github.com/ga-wdi-exercises/reminders_mongo).
   2. Make sure to checkout locally to the `mongoose` branch: `$ git checkout mongoose`
+  3. Also make sure you are running `$ mongod` in a separate Terminal tab.
 
 > [Starter Code](https://github.com/ga-wdi-exercises/reminders_mongo/tree/mongoose)
 >
@@ -90,7 +91,7 @@ Follow these steps...
 
 ## I Do: Mongoose and Connection Set Up (5 minutes / 0:25)
 
-For today's in-class demonstrations, I will be creating a app that uses two models: Students and Projects. After each demo, you will apply the same functionality to your Todo app.
+For today's in-class demonstrations, we will be creating an app that uses two models: Students and Projects. After each demo, you will apply the same functionality to your Todo app.
 
 Let's begin by installing Mongoose...
 
@@ -101,6 +102,8 @@ $ npm install mongoose --save
 In order to have access to `mongoose` in our application, we need to explicitly require mongoose and open a connection to the test database on our locally
 
 ```js
+// db/schema.js
+
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/students');
 ```
@@ -108,6 +111,8 @@ mongoose.connect('mongodb://localhost/students');
 > The name above `students` will be the name of the database stored in MongoDB
 
 ```js
+// db/schema.js
+
 var db = mongoose.connection;
 
 // Will log an error if db can't connect to MongoDB
@@ -145,6 +150,8 @@ Follow the instructions in the previous section to require mongoose in your Remi
 Here's an example of a Mongoose schema...
 
 ```js
+// db/schema.js
+
 // First, we instantiate a namespace for our Schema constructor defined by mongoose.
 var Schema = mongoose.Schema
 var ObjectId = Schema.ObjectId
@@ -164,7 +171,10 @@ Mongoose Models will represent documents in our database.
 * Models are defined by passing a Schema instance to `mongoose.model`.
 
 ```js
-var StudentModel = mongoose.model("Student", StudentSchema)
+// db/schema.js
+
+var Student = mongoose.model("Student", StudentSchema)
+var Project = mongoose.model("Project", ProjectSchema)
 ```
 
 The .model() function makes a copy of schema.
@@ -199,6 +209,8 @@ In Mongoose, we will do this using **embedded documents**.
 * The only difference is that embedded documents will not be saved individually, they are saved whenever their top-level parent document is saved.
 
 ```js
+// db/schema.js
+
 var ProjectSchema = new Schema({
   title: String,
   unit: String
@@ -229,6 +241,8 @@ var StudentSchema = new Schema({
 Similar to how we use foreign keys to represent a one-to-many relationship in Postgres, we can add `[references](https://docs.mongodb.org/manual/tutorial/model-referenced-one-to-many-relationships-between-documents)` to documents in other collections by storing an array of `ObjectIds` referencing document ids from another model.
 
 ```js
+// db/schema.js
+
 var ProjectSchema = new Schema({
   title: String,
   unit: String,
@@ -265,16 +279,18 @@ Use the previous section to step up your Reminder and Author schemas and models.
 First let's create an instance of our Student model. Here's one way of doing it...
 
 ```js
+// db/schema.js
+
 // First we create a new student. It's just like generating a new instance with a constructor function!
 var anna = new Student({name: "Anna", age: 30});
 
 // Then we save it to the database using .save
-anna.save(function(err, person){
+anna.save(function(err, student){
   if(err){
     console.log(err);
   }
   else{
-    console.log(person);
+    console.log(student);
   }
 });
 ```
@@ -284,12 +300,14 @@ anna.save(function(err, person){
 We can also consolidate that into a single `.create` method, like so...
 
 ```js
-Student.create({ name: 'Anna', age: 30 }, function (err, person) {
+// db/schema.js
+
+Student.create({ name: 'Anna', age: 30 }, function (err, student) {
   if (err){
     console.log(err);
   }
   else{
-    console.log(person);
+    console.log(student);
   }
 });
 ```
@@ -299,17 +317,19 @@ Student.create({ name: 'Anna', age: 30 }, function (err, person) {
 Next, let's create a Project...
 
 ```js
-var project1 = new ProjectModel({title: "memory game", unit: "JS"});
+// db/schema.js
+
+var anna = new Student({name: "Anna", age: 30});
+var project1 = new Project({title: "memory game", unit: "JS"});
 
 // Now we add that project to a student's collection / array of projects.
-becky.projects.push(project1)
+anna.projects.push(project1)
 
 // In order to save that project to the student, we need to call `.save` on the student -- not the project.
-becky.save(function(err, student){
+anna.save(function(err, student){
   if(err){
     console.log(err)
-  }
-  else{
+  } else {
     console.log(student + " was saved to our db!");
   }
 });
@@ -322,87 +342,85 @@ becky.save(function(err, student){
 Let's seed some data in our database. In order to do that, we need to first make sure we can connect `schema.js` to `seeds.js`. Let's add the following to `db/schema.js`...
 
 ```js
-// schema.js
+// db/schema.js
 
 // By adding `module.exports`, we can know reference these models in other files by requiring `schema.js`.
 module.exports = {
-  StudentModel: StudentModel,
-  ProjectModel: ProjectModel
+  Student: Student,
+  Project: Project
 };
 ```
 
 And add the following to `db/seeds.js`...
 
 ```js
-// seeds.js
+// db/seeds.js
 
 var mongoose = require('mongoose');
 var Schema = require("../db/schema.js");
 
-var StudentModel = Schema.StudentModel
-var ProjectModel = Schema.ProjectModel
+var Student = Schema.Student
+var Project = Schema.Project
 ```
 
 Now let's call some methods in `db/schema.js` that will populate our database...
 
 ```js
-// seeds.js
+// db/seeds.js
 
 var mongoose = require('mongoose');
-var Schema = require("../db/schema.js");
+var Schema = require("schema.js");
 
-var StudentModel = Schema.StudentModel
-var ProjectModel = Schema.ProjectModel
+var Student = Schema.Student
+var Project = Schema.Project
 
 // First we clear the database of existing students and projects.
-StudentModel.remove({}, function(err){
+Student.remove({}, function(err){
   console.log(err)
 });
 
-ProjectModel.remove({}, function(err){
+Project.remove({}, function(err){
   console.log(err)
 });
 
-// Now we generate instances of StudentModel and ProjectModel.
-var becky = new StudentModel({name: "becky"})
-var brandon = new StudentModel({name: "brandon"})
-var tom = new StudentModel({name: "tom"})
+// Now we generate instances of Student and Project.
+var becky = new Student({name: "becky"})
+var brandon = new Student({name: "brandon"})
+var tom = new Student({name: "tom"})
 
-var project1 = new ProjectModel({title: "project1!!", unit: "JS"})
-var project2 = new ProjectModel({title: "project2!!", unit: "Rails"})
-var project3 = new ProjectModel({title: "project3!!", unit: "Angular"})
-var project4 = new ProjectModel({title: "project4!!", unit: "Express"})
+var project1 = new Project({title: "project1!!", unit: "JS"})
+var project2 = new Project({title: "project2!!", unit: "Rails"})
+var project3 = new Project({title: "project3!!", unit: "Angular"})
+var project4 = new Project({title: "project4!!", unit: "Express"})
 
 var students = [becky, brandon, tom]
 var projects = [project1, project2, project3, project4]
 
 // Here we assign some projects to each student.
 for(var i = 0; i < students.length; i++){
-  students[i].projects.push(projects[i], projects[i+2])
-  students[i].save(function(err){
+  students[i].projects.push(projects[i], projects[i+1])
+  students[i].save(function(err, student){
     if (err){
       console.log(err)
-    }else {
-      console.log("student was saved");
+    } else {
+      console.log(student);
     }
   })
 };
 
 ```
 
-<!-- AM: Why does the above example use StudentModel instead of Student? -->
-
 Let's test if this all worked by opening Mongo in the Terminal...
 
 ```bash
 $ mongo
 $ show dbs
-$ use test
+$ use students
 $ show collections
 $ db.students.find()
 ```
 
-<!-- AM: Did we assign "test" as the db earlier? -->
+<!-- AM: Why doesn't show collections display projects? -->
 
 ### Callback Functions
 
@@ -439,12 +457,11 @@ Model.findById(someId, callback)
 // Find a single model using a key-value pair.
 Model.findOne({someKey: someValue}, callback)
 
-// Removes a document that matches a key-value pair.
+// Removes documents that match a key-value pair.
 Model.remove({someKey: someValue}, callback)
 ```
 
-<!-- AM: Can `.find` take multiple key-value pairs? -->
-<!-- AM: Does remove delete only one, or multiple? -->
+<!-- AM: Can `.find` and `.remove` take multiple key-value pairs? -->
 
 Let's use `.find` to implement `index` functionality. We'll do that in a controller file...
 
@@ -456,34 +473,42 @@ $ touch controllers/studentsController.js
 > We are adding a `controllers` directory and `studentsController.js` file to mimic how we might define a controller in an Express application. Like how our controllers helped us in Rails, we will be following similar REST conventions and using our controllers to listen for incoming requests and communication with our database.
 
 ```js
+// controllers/studentsController.js
+
+var Schema = require("../db/schema.js");
+var Student = Schema.Student;
+var Project = Schema.Project;
+
 var studentsController = {
   index: function(){
-    StudentModel.find({}, function(err, docs){
+    Student.find({}, function(err, docs){
       console.log(docs);
     });
   }
 };
 
-studentController.index();
+studentsController.index();
 ```
 
 Now let's do `show`...
 
 ```js
-var studentController = {
+// controllers/studentsController.js
+
+var studentsController = {
   index: function(){
-    StudentModel.find({}, function(err, docs){
+    Student.find({}, function(err, docs){
       console.log(docs);
     });
   },
   show: function(req){
-    StudentModel.findOne({"name": req.name}, function(err, docs){
+    Student.findOne({"name": req.name}, function(err, docs){
       console.log(docs);
     });
   }
 };
 
-studentController.show({name: "becky"});
+studentsController.show({name: "becky"});
 ```
 
 ## You Do: Index, Show, Update and Delete (15 minutes / 2:10)
@@ -504,11 +529,12 @@ Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) 
   <summary>**This is how to update...**</summary>
 
   ```js
-  var studentController = {
+  // controllers/studentsController.js
+  var studentsController = {
 
     // This method takes two arguments: (1) the old instance and (2) what we want to update it with.
     update: function(req, update){
-      StudentModel.findOneAndUpdate({name: req.name}, {name: update.name}, {new: true}, function(err, docs){
+      Student.findOneAndUpdate({name: req.name}, {name: update.name}, {new: true}, function(err, docs){
         if(err) {
           console.log(err)
         }
@@ -519,7 +545,7 @@ Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) 
     }
   };
 
-  studentController.update({name: "becky"}, {name: "Sarah"});
+  studentsController.update({name: "becky"}, {name: "Sarah"});
   ```
 
   > We are inserting {new: true} as an additional option. If we do not, we will get the old document as a return value -- not the updated one.
@@ -533,9 +559,11 @@ Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) 
   <summary>**This is how to delete...**</summary>
 
   ```js
+  // controllers/studentsController.js
+
   var studentsController = {
     destroy: function(req){
-      StudentModel.findOneAndRemove(req, function(err, docs){
+      Student.findOneAndRemove(req, function(err, docs){
         if(err){
           console.log(err);
         }
@@ -554,8 +582,10 @@ Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) 
 ## Deleting Embedded Documents (Bonus)
 
 ```js
+// controllers/studentsController.js
+
 removeProject: function(req, project){
-  StudentModel.findOneAndUpdate(req, {
+  Student.findOneAndUpdate(req, {
     $pull: { projects: {title: project} }
   },
   {new: true}, function(err, docs){
