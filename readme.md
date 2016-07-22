@@ -107,7 +107,7 @@ For today's in-class demonstrations, we will be creating an app that uses two mo
 Let's begin by installing Mongoose...
 
 ```bash
-$ npm install mongoose --save
+$ npm install --save mongoose
 ```
 
 In order to have access to `mongoose` in our application, we need to explicitly require mongoose and open a connection to the test database on our locally
