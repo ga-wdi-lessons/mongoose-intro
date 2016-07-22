@@ -2,12 +2,13 @@
 
 ## Learning Objectives
 
-- Explain what Mongoose is
-- Describe the role of Mongoose schema and models
-- Use Mongoose to perform CRUD functionality
-- List and describe common Mongoose queries
-- Persist data using Mongoose embedded documents
-- Describe how to use validations in Mongoose
+- Differentiate between NoSQL and SQL databases.
+- Explain what Mongoose is.
+- Describe the role of Mongoose schema and models.
+- Use Mongoose to perform CRUD functionality.
+- List and describe common Mongoose queries.
+- Persist data using Mongoose embedded documents.
+- Describe how to use validations in Mongoose.
 
 ## Opening Framing (10 minutes / 0:10)
 
