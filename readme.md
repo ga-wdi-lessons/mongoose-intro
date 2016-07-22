@@ -23,15 +23,17 @@ A NoSQL database is a non-relational database.
 
 #### How is a NoSQL database organized?
 
-A NoSQL database is organized into **documents** and **collections**.
+A NoSQL database can be organized into **documents** and **collections**.
 * Collections are the NoSQL equivalent of tables in a SQL database.
 * Documents are the NoSQL equivalent of a table row.
 
+> This is not the only way that a NoSQL database organizes data. Start [here](http://rebelic.nl/2011/05/28/the-four-categories-of-nosql-databases/) to learn more.
+
 #### What is MongoDB?
 
-A type of NoSQL database that stores information as JSON.
-* Think of this as taking the place of Postgres.
+A NoSQL database that stores information as JSON.
 * Technically, it's BJSON -- "binary JSON."
+* Think of this as taking the place of Postgres.
 
 #### Why use NoSQL/Mongo over SQL?
 
@@ -40,11 +42,11 @@ It's flexible.
 * That being said, you can enforce consistency using schemas. In fact, we'll be doing that in today's class.
 
 It's fast.
-* Data is "denormalized" in a NoSQL data, meaning that it's all in the same place
-* For example, a post's comments will be nested direclty within the post in the database).
-* Unlike a relational database, in which we need to make queries to retrieve data connected through a relation.
+* Data is "denormalized" in a NoSQL data, meaning that it's all in the same place.
+* For example, a post's comments will be nested directly within the post in the database.
+* This is unlike a relational database, in which we need to make queries to retrieve data connected through a relation.
 
-Many web apps implement object-oriented Javascript.
+Many web apps already implement object-oriented Javascript.
 * If we're using objects in both the back-end and front-end, that makes handling and sending data between the client and a database much easier.
 * No need for type conversion (e.g., making sure a Ruby hash is being served as JSON).
 
@@ -121,7 +123,10 @@ mongoose.connect('mongodb://localhost/students');
 
 ```js
 // db/schema.js
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/students');
 
+// Now that we're connected, let's save that connection to the database in a variable.
 var db = mongoose.connection;
 
 // Will log an error if db can't connect to MongoDB
@@ -151,7 +156,6 @@ Follow the instructions in the previous section to require mongoose in your Remi
 
 #### What is a Mongoose Schema?
 
-<!-- AM: Does everything in Mongoose need a schema? -->
 * Everything in Mongoose starts with a Schema!
 * Schemas are used to define attributes and structure for our documents.
 * Each Schema maps to a MongoDB collection and defines the shape of the documents within that collection.
@@ -168,7 +172,12 @@ var ObjectId = Schema.ObjectId
 var StudentSchema = new Schema({
   name: String,
   age: Number
-})
+});
+
+var ProjectSchema = new Project({
+  title: String,
+  unit: String
+});
 ```
 
 > Mongo will add a primary key to each object using `ObjectId`. This will be referenced as `id` in the data, just like in Rails.
@@ -182,11 +191,18 @@ Mongoose Models will represent documents in our database.
 ```js
 // db/schema.js
 
-var Student = mongoose.model("Student", StudentSchema)
-var Project = mongoose.model("Project", ProjectSchema)
+var Schema = mongoose.Schema
+var ObjectId = Schema.ObjectId
+
+var StudentSchema = new Schema({
+  name: String,
+  age: Number
+});
+
+var Student = mongoose.model("Student", StudentSchema);
 ```
 
-The .model() function makes a copy of schema.
+`.model()` makes a copy of schema.
 * The first argument is the singular name of the collection your model is for. Mongoose automatically looks for the plural version of your model name.
 * That means the model `Student` is for the `students` collection in the database.
 
@@ -231,6 +247,9 @@ var StudentSchema = new Schema({
   projects: [ProjectSchema]
 })
 
+var Student = mongoose.model("Student", StudentSchema);
+var Project = mongoose.model("Project", ProjectSchema);
+
 ```
 > The projects key of your `ProjectSchema` documents will contain a special array that has specific methods to work with embedded documents.
 >
@@ -243,7 +262,7 @@ var StudentSchema = new Schema({
 #### Disadvantages
 * Don't scale well. Documents cannot exceed 16MB in size.
 
-<!-- AM: Better way to put these pros & cons? -->
+> If you find that you are nesting documents within documents for 3+ levels, you should probably look into a relational database.
 
 ### Multiple Collections & References
 
@@ -264,13 +283,15 @@ var StudentSchema = new Schema({
   projects: [ {type: Schema.ObjectId, ref: "Project"}]
 });
 
+var Student = mongoose.model("Student", StudentSchema);
+var Project = mongoose.model("Project", ProjectSchema);
 ```
 
 > Since we are using an id to refer to other objects, we use the ObjectId type in the schema definition. The `ref` attribute must match the model used in the definition.
 
 #### Advantages
-* Could offer greater flexibility with querying
-* Might be a better decision for scaling
+* Could offer greater flexibility with querying.
+* Might be a better decision for scaling.
 
 #### Disadvantages
 * Requires more work. Need to find both documents that have the references (i.e., multiple queries).
@@ -344,14 +365,14 @@ anna.save(function(err, student){
 });
 ```
 
-<!-- AM: What happens if we call .save on the project? -->
-
 ## Seed Data (10 minutes / 1:30)
 
 Let's seed some data in our database. In order to do that, we need to first make sure we can connect `schema.js` to `seeds.js`. Let's add the following to `db/schema.js`...
 
 ```js
 // db/schema.js
+
+// The rest of our schema code is up here...
 
 // By adding `module.exports`, we can know reference these models in other files by requiring `schema.js`.
 module.exports = {
@@ -429,8 +450,6 @@ $ show collections
 $ db.students.find()
 ```
 
-<!-- AM: Why doesn't show collections display projects? -->
-
 ### Callback Functions
 
 Oftentimes, when making a Mongoose query we will pass in a callback function. It will be passed two arguments: `err` and `data`.
@@ -457,20 +476,18 @@ Like Active Record, Mongoose provides us with a variety of helper methods that a
 > Explore them using the [Mongoose Queries Documentation](http://mongoosejs.com/docs/api.html#query-js).
 
 ```js
-// Finds all documents of a specified model type. We can pass in a key-value pair to narrow down the search.
+// Finds all documents of a specified model type. We can pass in a key-value pair(s) to narrow down the search.
 Model.find({}, callback)
 
 // Finds a single model by its id.
 Model.findById(someId, callback)
 
-// Find a single model using a key-value pair.
+// Find a single model using a key-value pair(s).
 Model.findOne({someKey: someValue}, callback)
 
-// Removes documents that match a key-value pair.
+// Removes documents that match a key-value pair(s).
 Model.remove({someKey: someValue}, callback)
 ```
-
-<!-- AM: Can `.find` and `.remove` take multiple key-value pairs? -->
 
 Let's use `.find` to implement `index` functionality. We'll do that in a controller file...
 
@@ -561,8 +578,6 @@ Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) 
 
 </details>
 
-<!-- AM: Does req only need to contain one attribute or a whole object? -->
-
 <details>
 
   <summary>**This is how to delete...**</summary>
@@ -588,6 +603,10 @@ Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) 
 
 </details>
 
+> Don't look at these while working on the previous exercise!
+
+-----
+
 ## Deleting Embedded Documents (Bonus)
 
 ```js
@@ -611,8 +630,6 @@ removeProject: function(req, project){
 ## You Do: Embedded Documents (Bonus)
 
 Add code to add and delete Reminders from an Author document.
-
-<!-- AM: Is this a good opportunity for not giving them a solution? -->
 
 ## Validations (Bonus)
 
@@ -727,6 +744,8 @@ UserSchema.pre("save", function(next) {
 });
 
 ```
+
+-----
 
 ## Closing / Questions
 
