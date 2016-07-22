@@ -35,9 +35,15 @@ A type of NoSQL database that stores information as JSON.
 
 #### Why use NoSQL/Mongo over SQL?
 
-Flexibility
+It's flexible.
 * You don't need to follow a schema if you don't want to. This might be helpful with non-uniform data.
 * That being said, you can enforce consistency using schemas. In fact, we'll be doing that in today's class.
+
+It's fast.
+
+Many web apps implement object-oriented Javascript.
+* If we're using objects in both the back-end and front-end, that makes handling and sending data between the client and a database much easier.
+* No need for type conversion.
 
 #### What are some example MongoDB commands?
 
@@ -252,7 +258,7 @@ var ProjectSchema = new Schema({
 var StudentSchema = new Schema({
   name: String,
   age: Number,
-  projects: [ {type: Schema.ObjectId, ref: "Project"} ]
+  projects: [ {type: Schema.ObjectId, ref: "Project"}]
 });
 
 ```
@@ -264,7 +270,7 @@ var StudentSchema = new Schema({
 * Might be a better decision for scaling
 
 #### Disadvantages
-* Requires more work, need to find both documents that have the references(multiple queries)
+* Requires more work. Need to find both documents that have the references (i.e., multiple queries).
 
 ## You Do: Set Up Schema and Models for Reminders (10 minutes / 1:00)
 
@@ -357,7 +363,7 @@ And add the following to `db/seeds.js`...
 // db/seeds.js
 
 var mongoose = require('mongoose');
-var Schema = require("../db/schema.js");
+var Schema = require("./schema.js");
 
 var Student = Schema.Student
 var Project = Schema.Project
@@ -369,7 +375,7 @@ Now let's call some methods in `db/schema.js` that will populate our database...
 // db/seeds.js
 
 var mongoose = require('mongoose');
-var Schema = require("schema.js");
+var Schema = require("./schema.js");
 
 var Student = Schema.Student
 var Project = Schema.Project
