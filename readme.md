@@ -274,7 +274,7 @@ Use the previous section to step up your Reminder and Author schemas and models.
 
 ## Break (10 minutes / 1:10)
 
-## I Do: `Create` with Students and Projects (10 minutes / 1:20)
+## I Do: Create with Students and Projects (10 minutes / 1:20)
 
 First let's create an instance of our Student model. Here's one way of doing it...
 
