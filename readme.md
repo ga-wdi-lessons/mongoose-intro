@@ -757,7 +757,7 @@ UserSchema.pre("save", function(next) {
 
 ## Homework
 
-[YUM](https://github.com/ga-wdi-exercises/yum)!
+After this class you should be able to complete [Emergency Compliment](https://github.com/ga-wdi-exercises/compliment-express) and Part I of [YUM](https://github.com/ga-wdi-exercises/yum).
 
 ## Additional Resources
 
