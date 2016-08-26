@@ -175,7 +175,7 @@ var StudentSchema = new Schema({
   age: Number
 });
 
-var ProjectSchema = new Project({
+var ProjectSchema = new Schema({
   title: String,
   unit: String
 });
@@ -228,7 +228,7 @@ end
 
 In Mongoose, we will do this using **embedded documents**.
 
-### Embedded Documents
+### I Do: Embedded Documents
 
 [Embedded Documents](http://mongoosejs.com/docs/2.7.x/docs/embedded-documents.html) -- sometimes referred to as "sub-documents" -- are schemas of their own which are elements of a parent document's array
 * They contain all the same features as normal documents.
@@ -252,7 +252,7 @@ var Student = mongoose.model("Student", StudentSchema);
 var Project = mongoose.model("Project", ProjectSchema);
 
 ```
-> The projects key of your `ProjectSchema` documents will contain a special array that has specific methods to work with embedded documents.
+> The projects key of your `StudentSchema` documents will contain a special array that has specific methods to work with embedded documents.
 >
 > The Project Schema must be defined prior to our main Student Schema.
 
@@ -305,7 +305,7 @@ Use the previous section to step up your Reminder and Author schemas and models.
 
 ## Break (10 minutes / 1:10)
 
-## I Do: Create with Students and Projects (10 minutes / 1:20)
+## Create with Students and Projects (10 minutes / 1:20)
 
 First let's create an instance of our Student model. Here's one way of doing it...
 
@@ -343,7 +343,7 @@ Student.create({ name: 'Anna', age: 30 }, function (err, student) {
 });
 ```
 
-#### Add Embedded Documents
+#### I Do: Add Embedded Documents
 
 Next, let's create a Project...
 
@@ -440,6 +440,7 @@ for(var i = 0; i < students.length; i++){
 };
 
 ```
+Now, seed your database by running `node db/seeds.js` in your terminal. Use Ctrl + C to exit running Node.
 
 Let's test if this all worked by opening Mongo in the Terminal...
 
@@ -499,6 +500,7 @@ $ touch controllers/studentsController.js
 
 > We are adding a `controllers` directory and `studentsController.js` file to mimic how we might define a controller in an Express application. Like how our controllers helped us in Rails, we will be following similar REST conventions and using our controllers to listen for incoming requests and communication with our database.
 
+
 ```js
 // controllers/studentsController.js
 
@@ -516,6 +518,7 @@ var studentsController = {
 
 studentsController.index();
 ```
+Run `node controllers/studentsController.js` in the terminal.
 
 Now let's do `show`...
 
