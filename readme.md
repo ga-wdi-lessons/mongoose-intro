@@ -232,7 +232,7 @@ In Mongoose, we will do this using **embedded documents**.
 
 [Embedded Documents](http://mongoosejs.com/docs/2.7.x/docs/embedded-documents.html) -- sometimes referred to as "sub-documents" -- are schemas of their own which are elements of a parent document's array
 * They contain all the same features as normal documents.
-* The only difference is that embedded documents will not be saved individually, they are saved whenever their top-level parent document is saved.
+
 
 ```js
 // db/schema.js
