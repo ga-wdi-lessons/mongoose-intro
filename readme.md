@@ -153,7 +153,7 @@ Follow the instructions in the previous section to require mongoose in your Remi
 
 > [Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/267a908faaae06ab4c35da6d671a867cf1bc6426/db/schema.js)
 
-## I Do: Mongoose Schema & Models (10 minutes / 0:40)
+## Mongoose Schema & Models (10 minutes / 0:40)
 
 #### What is a Mongoose Schema?
 
@@ -610,30 +610,6 @@ Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) 
 > Don't look at these while working on the previous exercise!
 
 -----
-
-## Deleting Embedded Documents (Bonus)
-
-```js
-// controllers/studentsController.js
-
-removeProject: function(req, project){
-  Student.findOneAndUpdate(req, {
-    $pull: { projects: {title: project} }
-  },
-  {new: true}, function(err, docs){
-    if(err){
-      console.log(err);
-    }
-    else{
-      console.log(docs);
-    }
-  });
-}
-```
-
-## You Do: Embedded Documents (Bonus)
-
-Add code to add and delete Reminders from an Author document.
 
 ## Validations (Bonus)
 
