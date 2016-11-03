@@ -1,9 +1,3 @@
-<!-- TODOS -->
-  <!-- Include file creation instructions -->
-  <!-- Promises vs. Callbacks -->
-  <!-- Indicate when to (not) follow along -->
-  <!-- Update headers -->
-
 # Intro to Mongoose
 
 ## Learning Objectives
@@ -283,7 +277,7 @@ var Project = mongoose.model("Project", ProjectSchema);
 
 > If you find that you are nesting documents within documents for 3+ levels, you should probably look into a relational database.
 
-### Multiple Collections & References
+## I Do: Multiple Collections & References
 
 Similar to how we use foreign keys to represent a one-to-many relationship in Postgres, we can add [references](https://docs.mongodb.org/manual/tutorial/model-referenced-one-to-many-relationships-between-documents) to documents in other collections by storing an array of `ObjectIds` referencing document ids from another model.
 
@@ -487,14 +481,14 @@ $ show collections
 $ db.students.find()
 ```
 
-### Callback Functions
+## Callback Functions
 
 Oftentimes, when making a Mongoose query we will pass in a callback function. It will be passed two arguments: `err` and `data`.
 * `data` contains the result of the Mongoose query.
 
 <details>
 
-  <summary>Q: Why do you think callbacks might be necessary when using Mongoose?</summary>
+  <summary><strong>Why do you think callbacks might be necessary when using Mongoose?</strong></summary>
 
   > Because these queries are asynchronous! We want to make sure the query has finished before we run any code that depends on the result.
 
@@ -506,7 +500,7 @@ Now do the same thing with your Reminders app.
 
 > [Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/9b5a93841df550516e04778066cb43bd790c11f8)
 
-## Mongoose Queries (10 minutes / 1:55)
+## I Do: Mongoose Queries (10 minutes / 1:55)
 
 Like Active Record, Mongoose provides us with a variety of helper methods that allow us to easily retrieve documents from our database.
 
