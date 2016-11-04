@@ -575,6 +575,8 @@ var studentsController = {
 studentsController.show({name: "becky"});
 ```
 
+> `req` here stands for "request." While we don't have to name the argument that way, it is common practice. It represents information that is being sent to a server. In this case, it contains information about the data in question: a single student.
+
 ## You Do: Index, Show, Update and Delete (15 minutes / 2:10)
 
 Follow the above instructions to implement `index` and `show` for the Author model.
