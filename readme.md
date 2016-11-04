@@ -626,6 +626,13 @@ Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) 
 > [Update Solution](https://github.com/ga-wdi-exercises/reminders_mongo/commit/d51081c0bf995bbd7f47883467da1c06a03de058)
 > [Delete Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/469d3c09059c60b7779a8c3a8c2fb12aefcc779a/controllers/authors.controller.js)
 
+#### Bonus
+
+If you finish early...
+* Create a controller method that returns the number of Authors or Reminders in the database
+* Create a controller method that clears all of an Author's Reminders (i.e., the author has no reminders)
+* Check out the Validations section at the end of this lesson
+
 ## Break (5 minutes / 2:15)
 
 ## I Do: Update & Delete (10 minutes / 2:25)
@@ -686,7 +693,7 @@ Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) 
 
 -----
 
-## Validations (Bonus)
+## Bonus: Validations
 
 Mongoose contains built-in validators and an option to create custom validators as well.
 
