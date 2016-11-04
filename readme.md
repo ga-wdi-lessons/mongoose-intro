@@ -45,23 +45,20 @@ Before we dive into Mongoose, however, let's talk a bit about about last night's
 
 </details>
 
-<details>
-  <summary><strong>Why use NoSQL/Mongo over SQL?</strong></summary>
+#### Why Use NoSQL/Mongo Over SQL?
 
-  It's flexible.
-  * You don't need to follow a schema if you don't want to. This might be helpful with non-uniform data.
-  * That being said, you can enforce consistency using schemas. In fact, we'll be doing that in today's class.
+It's flexible.
+* You don't need to follow a schema if you don't want to. This might be helpful with non-uniform data.
+* That being said, you can enforce consistency using schemas. In fact, we'll be doing that in today's class.
 
-  It's fast.
-  * Data is "denormalized" in a NoSQL data, meaning that it's all in the same place.
-  * For example, a post's comments will be nested directly within the post in the database.
-  * This is unlike a relational database, in which we need to make queries to retrieve data connected through a relation.
+It's fast.
+* Data is "denormalized" in a NoSQL data, meaning that it's all in the same place.
+* For example, a post's comments will be nested directly within the post in the database.
+* This is unlike a relational database, in which we need to make queries to retrieve data connected through a relation.
 
-  Many web apps already implement object-oriented Javascript.
-  * If we're using objects in both the back-end and front-end, that makes handling and sending data between the client and a database much easier.
-  * No need for type conversion (e.g., making sure a Ruby hash is being served as JSON).
-
-</details>
+Many web apps already implement object-oriented Javascript.
+* If we're using objects in both the back-end and front-end, that makes handling and sending data between the client and a database much easier.
+* No need for type conversion (e.g., making sure a Ruby hash is being served as JSON).
 
 #### Example MongoDB Commands
 
