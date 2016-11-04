@@ -324,6 +324,24 @@ var Project = mongoose.model("Project", ProjectSchema);
 
 Use the previous section to step up your Reminder and Author schemas and models.
 
+Place the following code at the bottom of your schema file. You'll know you set up your schema properly if, after running it, you see information about an Author printed to the console. Don't worry about what it means - we'll go over that soon in this lesson.
+
+```js
+var john = new Author({name: "John"})
+var newReminder = new Reminder({body: "Don't forget to set up your schema properly"})
+
+john.reminders.push(newReminder)
+
+john.save((err, author) => {
+  if(err){
+    console.error(err)
+  } else {
+    console.log(author)
+    process.exit()
+  }
+})
+```
+
 > [Solution](https://github.com/ga-wdi-exercises/reminders_mongo/blob/cfee42d3cfd0bf5f2581cc61ba712eb8e1b7777f/db/schema.js)
 
 ## Break (10 minutes / 1:10)
