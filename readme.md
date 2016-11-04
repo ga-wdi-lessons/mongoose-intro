@@ -208,7 +208,13 @@ var StudentSchema = new Schema({
   age: Number
 });
 
+var ProjectSchema = new Schema({
+  title: String,
+  unit: String
+});
+
 var Student = mongoose.model("Student", StudentSchema);
+var Project = mongoose.model("Project", ProjectSchema)
 ```
 
 `.model()` makes a copy of a schema.
