@@ -390,7 +390,6 @@ anna.save().then(student => {   // We don't pass in `err` as an argument here...
 });
 ```
 
-
 ## I Do: Add Embedded Documents
 
 Next, let's create a Project...
