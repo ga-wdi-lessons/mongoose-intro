@@ -456,7 +456,6 @@ And add the following to `db/seeds.js`...
 ```js
 // db/seeds.js
 
-var mongoose = require('mongoose');
 var Schema = require("./schema.js");
 
 var Student = Schema.Student
@@ -468,7 +467,6 @@ Now let's call some methods in `db/schema.js` that will populate our database...
 ```js
 // db/seeds.js
 
-var mongoose = require('mongoose');
 var Schema = require("./schema.js");
 
 var Student = Schema.Student
