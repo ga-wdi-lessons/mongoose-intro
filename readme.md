@@ -97,7 +97,11 @@ kitty.save(err => {
 
 ## You Do: Initial Set Up for Reminders (5 minutes / 0:20)
 
-During today's in-class exercises, you will be creating a two-model todo app using Mongoose and MongoDB. It will have two models: Authors and Reminders.
+During today's in-class exercises, you will be creating a two-model todo app using Mongoose and MongoDB.
+
+It will have two models: Authors and Reminders.
+* Each Author has a `name` (string)
+* Each Reminder has a `body` (string)
 
 Authors will have many Reminders, although we won't be implementing that using a SQL relationship.
 
