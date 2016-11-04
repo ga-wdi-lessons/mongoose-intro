@@ -362,6 +362,21 @@ Student.create({ name: 'Anna', age: 30 }, function (err, student) {
 });
 ```
 
+## Callback Functions
+
+Oftentimes, when making a Mongoose query we will pass in a callback function. It will be passed two arguments: `err` and `data`.
+* `err` will contain an error message if something goes wrong with the Mongoose query
+* `data` contains the result of the Mongoose query
+
+<details>
+
+  <summary><strong>Why do you think callbacks might be necessary when using Mongoose?</strong></summary>
+
+  > Because these queries are asynchronous! We want to make sure the query has finished before we run any code that depends on the result.
+
+</details>
+
+
 ## I Do: Add Embedded Documents
 
 Next, let's create a Project...
@@ -482,19 +497,6 @@ $ use students
 $ show collections
 $ db.students.find()
 ```
-
-## Callback Functions
-
-Oftentimes, when making a Mongoose query we will pass in a callback function. It will be passed two arguments: `err` and `data`.
-* `data` contains the result of the Mongoose query.
-
-<details>
-
-  <summary><strong>Why do you think callbacks might be necessary when using Mongoose?</strong></summary>
-
-  > Because these queries are asynchronous! We want to make sure the query has finished before we run any code that depends on the result.
-
-</details>
 
 ## You Do: Add Seed Data and Create to Reminders (15 minutes / 1:45)
 
