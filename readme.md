@@ -550,8 +550,6 @@ $ touch controllers/studentsController.js
 
 > We are adding a `controllers` directory and `studentsController.js` file to mimic how we might define a controller in an Express application. Like how our controllers helped us in Rails, we will be following similar REST conventions and using our controllers to listen for incoming requests and communication with our database.
 
-<!-- AM: Are we following this convention in later classes? -->
-
 
 ```js
 // controllers/studentsController.js
@@ -561,8 +559,8 @@ var Student = Schema.Student;
 var Project = Schema.Project;
 
 var studentsController = {
-  index: function(){
-    Student.find({}, (err, docs) => {
+  index(){
+    Student.find({}, (err, students) => {
       console.log(docs);
     });
   }
@@ -579,14 +577,14 @@ Now let's do `show`...
 // controllers/studentsController.js
 
 var studentsController = {
-  index: function(){
-    Student.find({}, (err, docs) => {
-      console.log(docs);
+  index(){
+    Student.find({}, (err, students) => {
+      console.log(students);
     });
   },
-  show: function(req){
-    Student.findOne({"name": req.name}, (err, docs) => {
-      console.log(docs);
+  show(req){
+    Student.findOne({name: req.name}, (err, student) => {
+      console.log(student);
     });
   }
 };
@@ -618,13 +616,13 @@ Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) 
   var studentsController = {
 
     // This method takes two arguments: (1) the old instance and (2) what we want to update it with.
-    update: function(req, update){
-      Student.findOneAndUpdate({name: req.name}, {name: update.name}, {new: true}, (err, docs) => {
+    update(req, update){
+      Student.findOneAndUpdate({name: req.name}, {name: update.name}, {new: true}, (err, student) => {
         if(err) {
           console.log(err)
         }
         else {
-          console.log(docs);
+          console.log(student);
         }
       });
     }
@@ -645,7 +643,7 @@ Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) 
   // controllers/studentsController.js
 
   var studentsController = {
-    destroy: function(req){
+    destroy(req){
       Student.findOneAndRemove(req, (err, docs) => {
         if(err){
           console.log(err);
