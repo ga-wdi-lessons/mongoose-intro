@@ -89,7 +89,7 @@ mongoose.connect('mongodb://localhost/test');
 var Cat = mongoose.model('Cat', { name: String });
 
 var kitty = new Cat({ name: 'Zilda' });
-kitty.save(function (err) {
+kitty.save(err => {
   if (err) // ...
   console.log('meow');
 });
@@ -142,12 +142,12 @@ mongoose.connect('mongodb://localhost/students');
 var db = mongoose.connection;
 
 // Will log an error if db can't connect to MongoDB
-db.on('error', function(err){
+db.on('error', err => {
   console.log(err);
 });
 
 // Will log "database has been connected" if it successfully connects.
-db.once('open', function() {
+db.once('open', () => {
   console.log("database has been connected!");
 });
 ```
@@ -335,7 +335,7 @@ First let's create an instance of our Student model. Here's one way of doing it.
 var anna = new Student({name: "Anna", age: 30});
 
 // Then we save it to the database using .save
-anna.save(function(err, student){
+anna.save((err, student) => {
   if(err){
     console.log(err);
   }
@@ -352,7 +352,7 @@ We can also consolidate that into a single `.create` method, like so...
 ```js
 // db/schema.js
 
-Student.create({ name: 'Anna', age: 30 }, function (err, student) {
+Student.create({ name: 'Anna', age: 30 }, (err, student) => {
   if (err){
     console.log(err);
   }
@@ -376,6 +376,20 @@ Oftentimes, when making a Mongoose query we will pass in a callback function. It
 
 </details>
 
+## Promises
+
+If callbacks aren't your cup of tea, you can replace the callbacks we used above with promise methods.
+
+```js
+var anna = new Student({name: "Anna", age: 30});
+
+anna.save().then(student => {   // We don't pass in `err` as an argument here...
+  console.log(student)
+}).catch(err => {               // ...instead, we pass it in here
+  console.log(err)              // If there's an error, this `.catch` method will be triggered
+});
+```
+
 
 ## I Do: Add Embedded Documents
 
@@ -391,7 +405,7 @@ var project1 = new Project({title: "memory game", unit: "JS"});
 anna.projects.push(project1)
 
 // In order to save that project to the student, we need to call `.save` on the student -- not the project.
-anna.save(function(err, student){
+anna.save((err, student) => {
   if(err){
     console.log(err)
   } else {
@@ -440,12 +454,16 @@ var Student = Schema.Student
 var Project = Schema.Project
 
 // First we clear the database of existing students and projects.
-Student.remove({}, function(err){
-  console.log(err)
+Student.remove({}, err => {
+  if(err){
+    console.log(err)
+  }
 });
 
-Project.remove({}, function(err){
-  console.log(err)
+Project.remove({}, err => {
+  if(err){
+    console.log(err)
+  }
 });
 
 // Now we generate instances of Student and Project.
@@ -464,7 +482,7 @@ var projects = [project1, project2, project3, project4]
 // Here we assign some projects to each student.
 for(var i = 0; i < students.length; i++){
   students[i].projects.push(projects[i], projects[i+1])
-  students[i].save(function(err, student){
+  students[i].save((err, student) => {
     if (err){
       console.log(err)
     } else {
@@ -474,9 +492,9 @@ for(var i = 0; i < students.length; i++){
 };
 
 // ...or you could use forEach instead of a for loop...
-students.forEach(function(student, i){
+students.forEach((student, i) => {
   student.projects.push(projects[i], projects[i+1])   // Assigning each student multiple projects
-  student.save(function(err, student){
+  student.save((err, student) => {
     if (err){
       console.log(err)
     } else {
@@ -545,7 +563,7 @@ var Project = Schema.Project;
 
 var studentsController = {
   index: function(){
-    Student.find({}, function(err, docs){
+    Student.find({}, (err, docs) => {
       console.log(docs);
     });
   }
@@ -563,12 +581,12 @@ Now let's do `show`...
 
 var studentsController = {
   index: function(){
-    Student.find({}, function(err, docs){
+    Student.find({}, (err, docs) => {
       console.log(docs);
     });
   },
   show: function(req){
-    Student.findOne({"name": req.name}, function(err, docs){
+    Student.findOne({"name": req.name}, (err, docs) => {
       console.log(docs);
     });
   }
@@ -602,7 +620,7 @@ Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) 
 
     // This method takes two arguments: (1) the old instance and (2) what we want to update it with.
     update: function(req, update){
-      Student.findOneAndUpdate({name: req.name}, {name: update.name}, {new: true}, function(err, docs){
+      Student.findOneAndUpdate({name: req.name}, {name: update.name}, {new: true}, (err, docs) => {
         if(err) {
           console.log(err)
         }
@@ -629,7 +647,7 @@ Then use [Mongoose documentation](http://mongoosejs.com/docs/api.html#query-js) 
 
   var studentsController = {
     destroy: function(req){
-      Student.findOneAndRemove(req, function(err, docs){
+      Student.findOneAndRemove(req, (err, docs) => {
         if(err){
           console.log(err);
         }
