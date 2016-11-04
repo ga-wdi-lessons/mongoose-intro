@@ -580,7 +580,7 @@ var Project = Schema.Project;
 var studentsController = {
   index(){
     Student.find({}, (err, students) => {
-      console.log(docs);
+      console.log(students);
     });
   }
 };
