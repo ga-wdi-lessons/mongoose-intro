@@ -441,10 +441,10 @@ var becky = new Student({name: "becky"})
 var brandon = new Student({name: "brandon"})
 var tom = new Student({name: "tom"})
 
-var project1 = new Project({title: "project1!!", unit: "JS"})
-var project2 = new Project({title: "project2!!", unit: "Rails"})
-var project3 = new Project({title: "project3!!", unit: "Angular"})
-var project4 = new Project({title: "project4!!", unit: "Express"})
+var project1 = new Project({title: "Project 1", unit: "JS"})
+var project2 = new Project({title: "Project 2", unit: "Rails"})
+var project3 = new Project({title: "Project 3", unit: "Angular"})
+var project4 = new Project({title: "Project 4", unit: "Express"})
 
 var students = [becky, brandon, tom]
 var projects = [project1, project2, project3, project4]
@@ -463,8 +463,8 @@ for(var i = 0; i < students.length; i++){
 
 // ...or you could use forEach instead of a for loop...
 students.forEach(function(student, i){
-  students[i].projects.push(projects[i], projects[i+1])   // Assigning each student multiple projects
-  students[i].save(function(err, student){
+  student.projects.push(projects[i], projects[i+1])   // Assigning each student multiple projects
+  student.save(function(err, student){
     if (err){
       console.log(err)
     } else {
