@@ -8,7 +8,6 @@
 - Use Mongoose to perform CRUD functionality
 - List and describe common Mongoose queries
 - Persist data using Mongoose embedded documents
-- Describe how to use validations in Mongoose
 
 ## Opening Framing (10 minutes / 0:10)
 
