@@ -295,8 +295,7 @@ var ObjectId = Schema.ObjectId
 
 var ProjectSchema = new Schema({
   title: String,
-  unit: String,
-  students: [{type: Schema.ObjectId, ref: "Student"}]
+  unit: String
 });
 
 var StudentSchema = new Schema({
