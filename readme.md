@@ -105,7 +105,7 @@ It will have two models: Authors and Reminders.
 Authors will have many Reminders, although we won't be implementing that using a SQL relationship.
 
 Follow these steps...
-  1. Fork and Clone [this repo](https://github.com/ga-wdi-exercises/reminders_mongo): `$ git clone git@github.com:ga-wdi-exercises/reminders_mongo.git`
+  1. Clone [this repo](https://github.com/ga-wdi-exercises/reminders_mongo): `$ git clone https://github.com/ga-wdi-exercises/reminders_mongo.git`
   2. Make sure to checkout locally to the `mongoose` branch: `$ git checkout mongoose`
   3. Also make sure you are running `$ mongod` in a separate Terminal tab.
 
