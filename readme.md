@@ -221,7 +221,7 @@ var Project = mongoose.model("Project", ProjectSchema)
 * The first argument is the singular name of the collection your model is for. Mongoose automatically looks for the plural version of your model name when creating a collection.
 * That means the `Student` model is for the `students` collection in the database.
 
-## Collections: Embedded Documents & References (10 minutes / 0:50)
+## Collections: Embedded Documents (10 minutes / 0:50)
 
 Let's add another model to `db/schema.js`.
 * We will be adding a schema for `Project` since we want to create an application that tracks Students and Projects
@@ -283,41 +283,6 @@ var Project = mongoose.model("Project", ProjectSchema);
 
 > If you find that you are nesting documents within documents for 3+ levels, you should probably look into a relational database.
 
-## I Do: Multiple Collections & References
-
-Similar to how we use foreign keys to represent a one-to-many relationship in Postgres, we can add [references](https://docs.mongodb.org/manual/tutorial/model-referenced-one-to-many-relationships-between-documents) to documents in other collections by storing an array of `ObjectIds` referencing document ids from another model.
-
-```js
-// db/schema.js
-
-var Schema = mongoose.Schema
-var ObjectId = Schema.ObjectId
-
-var ProjectSchema = new Schema({
-  title: String,
-  unit: String
-});
-
-var StudentSchema = new Schema({
-  name: String,
-  age: Number,
-  projects: [ {type: Schema.ObjectId, ref: "Project"}]
-});
-
-var Student = mongoose.model("Student", StudentSchema);
-var Project = mongoose.model("Project", ProjectSchema);
-```
-
-> Since we are using an id to refer to other objects, we use the ObjectId type in the schema definition. The `ref` attribute must match the model used in the definition.
-
-#### Advantages
-
-* Could offer greater flexibility with querying.
-* Might be a better decision for scaling.
-
-#### Disadvantages
-
-* Requires more work. Need to find both documents that have the references (i.e., multiple queries).
 
 ## You Do: Set Up Schema and Models for Reminders (10 minutes / 1:00)
 
@@ -803,6 +768,42 @@ UserSchema.pre("save", function(next) {
 });
 
 ```
+
+## Bonus: Multiple Collections & References
+
+Similar to how we use foreign keys to represent a one-to-many relationship in Postgres, we can add [references](https://docs.mongodb.org/manual/tutorial/model-referenced-one-to-many-relationships-between-documents) to documents in other collections by storing an array of `ObjectIds` referencing document ids from another model.
+
+```js
+// db/schema.js
+
+var Schema = mongoose.Schema
+var ObjectId = Schema.ObjectId
+
+var ProjectSchema = new Schema({
+  title: String,
+  unit: String
+});
+
+var StudentSchema = new Schema({
+  name: String,
+  age: Number,
+  projects: [ {type: Schema.ObjectId, ref: "Project"}]
+});
+
+var Student = mongoose.model("Student", StudentSchema);
+var Project = mongoose.model("Project", ProjectSchema);
+```
+
+> Since we are using an id to refer to other objects, we use the ObjectId type in the schema definition. The `ref` attribute must match the model used in the definition.
+
+#### Advantages
+
+* Could offer greater flexibility with querying.
+* Might be a better decision for scaling.
+
+#### Disadvantages
+
+* Requires more work. Need to find both documents that have the references (i.e., multiple queries).
 
 -----
 
