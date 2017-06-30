@@ -681,7 +681,7 @@ If you finish early...
     }
   };
 
-  studentsController.destroy({name: "bob"});
+  studentsController.destroy({name: "brandon"});
   ```
 
 </details>
